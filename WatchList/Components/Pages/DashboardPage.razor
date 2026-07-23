@@ -1,0 +1,76 @@
+﻿@page "/dashboard"
+@attribute [StreamRendering]
+@inject FileService FileService;
+
+<h1>Dashboard</h1>
+<br />
+
+@if (data is null)
+{
+    <MudProgressLinear Indeterminate="true" Color="Color.Primary" Size="Size.Medium" Striped="true" />
+}
+else
+{
+    <MudGrid Class="mb-2">
+        <MudItem xs="12" sm="6" md="4">
+            <MudPaper Elevation="2" Class="pa-4 d-flex align-center justify-center" Style="height: 100px;">
+                <MudText Typo="Typo.h5">In Progress: @data[0]</MudText>
+            </MudPaper>
+        </MudItem>
+        <MudItem xs="12" sm="6" md="4">
+            <MudPaper Elevation="2" Class="pa-4 d-flex align-center justify-center" Style="height: 100px;">
+                <MudText Typo="Typo.h5">Anime: @data[1]</MudText>
+            </MudPaper>
+        </MudItem>
+        <MudItem xs="12" sm="12" md="4">
+            <MudPaper Elevation="2" Class="pa-4 d-flex align-center justify-center" Style="height: 100px;">
+                <MudText Typo="Typo.h5">Movie: @data[5]</MudText>
+            </MudPaper>
+        </MudItem>
+    </MudGrid>
+
+    <MudPaper Class="pa-4">
+        @if (indexSelected >= 0)
+        {
+            <MudText Typo="Typo.h5" Class="text-center mb-2">@CategorySelected(indexSelected)</MudText>
+        }
+
+        <MudChart ChartType="ChartType.Pie" InputData="@data" @bind-SelectedIndex="indexSelected" InputLabels="@labels" Width="300px" Height="300px" />
+    </MudPaper>
+}
+
+@code
+{
+    private double[]? data = null;
+    private int indexSelected = -1;
+    private string[] labels = { "In Progress", "Anime", "Book", "Game", "Manga", "Movie", "Queue", "Serie" };
+
+    protected override async Task OnInitializedAsync()
+    {
+        var inProgressList = await FileService.ReadInProgressFileAsync();
+        var animeList = await FileService.ReadAnimeFileAsync();
+        var bookList = await FileService.ReadBookFileAsync();
+        var gameList = await FileService.ReadGameFileAsync();
+        var mangaList = await FileService.ReadMangaFileAsync();
+        var movieList = await FileService.ReadMovieFileAsync();
+        var queueList = await FileService.ReadQueueFileAsync();
+        var serieList = await FileService.ReadSerieFileAsync();
+
+        data = new double[]
+        {
+            inProgressList.Count,
+            animeList.Count,
+            bookList.Count,
+            gameList.Count,
+            mangaList.Count,
+            movieList.Count,
+            queueList.Count,
+            serieList.Count
+        };
+    }
+
+    private string CategorySelected(int index)
+    {
+        return $"{labels?[index]}: {data?[index]}";
+    }
+}

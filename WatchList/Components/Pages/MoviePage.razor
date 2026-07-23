@@ -1,0 +1,63 @@
+﻿@page "/movie"
+@attribute [StreamRendering]
+@inject FileService FileService;
+
+<h1>Movies</h1>
+<br />
+
+@if (list is null)
+{
+    <MudProgressLinear Indeterminate="true" Color="Color.Primary" Size="Size.Medium" Striped="true" />
+}
+else
+{
+    <MudTable Items="@list" Hover="true" Dense="true" Bordered="true" Breakpoint="Breakpoint.None" Filter="new Func<Movie,bool>(FilterFunc1)">
+        <ToolBarContent>
+            <MudTextField @bind-Value="searchString" Placeholder="Search" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
+        </ToolBarContent>
+
+        <HeaderContent>
+            <MudTh Class="text-center w-10">#</MudTh>
+            <MudTh>Name</MudTh>
+        </HeaderContent>
+
+        <RowTemplate>
+            <MudTd Class="text-center">@GetRowNumber(context)</MudTd>
+            <MudTd>@context.Name</MudTd>
+        </RowTemplate>
+
+        <PagerContent>
+            <MudTablePager PageSizeOptions="new int[] { 15, 30, 50, 100, int.MaxValue }" />
+        </PagerContent>
+    </MudTable>
+}
+
+@code
+{
+    private List<Movie>? list;
+    private string searchString = "";
+
+    protected override async Task OnInitializedAsync()
+    {
+        list = await FileService.ReadMovieFileAsync();
+    }
+
+    protected int GetRowNumber(Movie context)
+    {
+        if (list is null)
+            return 0;
+
+        return list.IndexOf(context) + 1;
+    }
+
+    private bool FilterFunc1(Movie element) => FilterFunc(element, searchString);
+
+    private bool FilterFunc(Movie element, string input)
+    {
+        if (string.IsNullOrWhiteSpace(input))
+            return true;
+        if (element.Name.Contains(input, StringComparison.OrdinalIgnoreCase))
+            return true;
+        return false;
+    }
+}

@@ -1,0 +1,34 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <UserSecretsId>aspnet-WatchList-be8fb7ac-113c-4648-9cef-867a93b91410</UserSecretsId>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="8.0.2" />
+    <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="8.0.2" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="8.0.2" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="8.0.2" />
+    <PackageReference Include="MudBlazor" Version="6.20.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="wwwroot\AppData\" />
+    <Folder Include="Data\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="wwwroot\AppData\anime.txt" />
+    <None Include="wwwroot\AppData\books.txt" />
+    <None Include="wwwroot\AppData\games.txt" />
+    <None Include="wwwroot\AppData\index.txt" />
+    <None Include="wwwroot\AppData\manga.txt" />
+    <None Include="wwwroot\AppData\movies.txt" />
+    <None Include="wwwroot\AppData\queue.txt" />
+    <None Include="wwwroot\AppData\series.txt" />
+  </ItemGroup>
+
+</Project>

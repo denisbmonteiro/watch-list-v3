@@ -1,0 +1,62 @@
+﻿@inherits LayoutComponentBase
+
+<PageTitle>Snow's Lists</PageTitle>
+
+<MudThemeProvider IsDarkMode="@isDarkMode" />
+<MudDialogProvider />
+<MudSnackbarProvider />
+
+<MudLayout>
+    <MudAppBar Elevation="1">
+        <MudIconButton Icon="@Icons.Material.Filled.Menu" Color="Color.Inherit" Edge="Edge.Start" OnClick="@ToggleDrawer" />
+        <MudSpacer />
+        <MudNavLink Href="/">Snow's List</MudNavLink>
+        <MudSpacer />
+        <MudIconButton Icon="@icon" Color="Color.Inherit" Edge="Edge.End" OnClick="@ToggleDarkMode" />
+    </MudAppBar>
+
+    <MudDrawer @bind-Open="@isDrawerOpen" Elevation="1">
+        <MudDrawerHeader>
+            <MudText Typo="Typo.h6">Snow's List</MudText>
+        </MudDrawerHeader>
+        <MudNavMenu Bordered="true">
+            <NavMenu/>
+        </MudNavMenu>
+    </MudDrawer>
+
+    <MudMainContent>
+        <MudContainer Class="mt-6 mb-6">
+            @Body
+        </MudContainer>
+
+        <MudContainer Class="mb-3 d-flex justify-center">
+            Made by
+            <MudElement HtmlTag="a" Class="ms-1" Style="color:grey;font-weight:bold;" href="https://denisbm.com" target="blank" rel="noopener noreferrer">
+                Denis Bittencourt
+            </MudElement>
+            !
+        </MudContainer>
+    </MudMainContent>
+
+    <MudScrollToTop>
+        <MudFab Color="Color.Primary" StartIcon="@Icons.Material.Filled.ArrowCircleUp" />
+    </MudScrollToTop>
+</MudLayout>
+
+@code
+{
+    private bool isDrawerOpen = false;
+    private bool isDarkMode = true;
+    private string icon = Icons.Material.Filled.LightMode;
+
+    private void ToggleDrawer()
+    {
+        isDrawerOpen = !isDrawerOpen;
+    }
+
+    private void ToggleDarkMode()
+    {
+        isDarkMode = !isDarkMode;
+        icon = isDarkMode ? Icons.Material.Filled.LightMode : Icons.Material.Filled.DarkMode;
+    }
+}

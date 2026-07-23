@@ -1,0 +1,65 @@
+﻿@page "/queue"
+@attribute [StreamRendering]
+@inject FileService FileService;
+
+<h1>Queue</h1>
+<br />
+
+@if (list is null)
+{
+    <MudProgressLinear Indeterminate="true" Color="Color.Primary" Size="Size.Medium" Striped="true" />
+}
+else
+{
+    <MudTable Items="@list" Hover="true" Dense="true" Bordered="true" Breakpoint="Breakpoint.None" Filter="new Func<Queue,bool>(FilterFunc1)">
+        <ToolBarContent>
+            <MudTextField @bind-Value="searchString" Placeholder="Search" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
+        </ToolBarContent>
+
+        <HeaderContent>
+            <MudTh Class="text-center w-10">#</MudTh>
+            <MudTh>Name</MudTh>
+            <MudTh Class="text-center w-15">Type</MudTh>
+        </HeaderContent>
+
+        <RowTemplate>
+            <MudTd Class="text-center">@GetRowNumber(context)</MudTd>
+            <MudTd>@context.Name</MudTd>
+            <MudTd Class="text-center">@context.Type</MudTd>
+        </RowTemplate>
+
+        <PagerContent>
+            <MudTablePager PageSizeOptions="new int[] { 15, 30, 50, 100, int.MaxValue }" />
+        </PagerContent>
+    </MudTable>
+}
+
+@code
+{
+    private List<Queue>? list;
+    private string searchString = "";
+
+    protected override async Task OnInitializedAsync()
+    {
+        list = await FileService.ReadQueueFileAsync();
+    }
+
+    protected int GetRowNumber(Queue context)
+    {
+        if (list is null)
+            return 0;
+
+        return list.IndexOf(context) + 1;
+    }
+
+    private bool FilterFunc1(Queue element) => FilterFunc(element, searchString);
+
+    private bool FilterFunc(Queue element, string input)
+    {
+        if (string.IsNullOrWhiteSpace(input))
+            return true;
+        if (element.Name.Contains(input, StringComparison.OrdinalIgnoreCase))
+            return true;
+        return false;
+    }
+}
