@@ -1,13 +1,29 @@
 **/bin/
 **/obj/
+**/node_modules/
 
 .git
 .gitignore
+.gitattributes
 
 .vs
 .vscode
+.vscode-test
+*.code-workspace
+
+.github
+.gitlab-ci.yml
+.circleci
+
+.DS_Store
+.env.local
 
 README.md
+.editorconfig
 
 Dockerfile*
 docker-compose*
+
+*.md
+*.log
+test/
