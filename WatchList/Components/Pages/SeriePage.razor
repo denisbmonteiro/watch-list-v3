@@ -19,15 +19,17 @@ else
         <HeaderContent>
             <MudTh Class="text-center w-10">#</MudTh>
             <MudTh>Name</MudTh>
+            <MudTh Class="text-center w-15">Progress</MudTh>
         </HeaderContent>
 
         <RowTemplate>
             <MudTd Class="text-center">@GetRowNumber(context)</MudTd>
             <MudTd>@context.Name</MudTd>
+            <MudTd Class="text-center">@context.Progress</MudTd>
         </RowTemplate>
 
         <PagerContent>
-            <MudTablePager PageSizeOptions="new int[] { 15, 30, 50, 100, int.MaxValue }" />
+            <MudTablePager PageSizeOptions="new int[] { 20, 50, 100, int.MaxValue }" />
         </PagerContent>
     </MudTable>
 }

@@ -164,9 +164,12 @@ public class FileService
 
         foreach (var line in lines)
         {
+            var fields = line.Split('_');
+
             var serie = new Serie
             {
-                Name = line
+                Name = fields.Length > 0 ? fields[0] : string.Empty,
+                Progress = fields.Length > 1 ? fields[1] : string.Empty
             };
 
             list.Add(serie);
