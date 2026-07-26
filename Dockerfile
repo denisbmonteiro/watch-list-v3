@@ -21,7 +21,7 @@ RUN dotnet publish WatchList/WatchList.csproj \
 
 # Runtime
 
-FROM mcr.microsoft.com/dotnet/aspnet:10.0-noble-chiseled
+FROM mcr.microsoft.com/dotnet/aspnet:10.0
 
 WORKDIR /app
 
