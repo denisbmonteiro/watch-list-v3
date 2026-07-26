@@ -13,11 +13,7 @@ COPY . .
 
 RUN dotnet publish WatchList/WatchList.csproj \
     -c Release \
-    -o /app/publish \
-    --no-restore \
-    -p:UseAppHost=false \
-    -p:DebugType=none \
-    -p:DebugSymbols=false
+    -o /app/publish
 
 # Runtime
 
