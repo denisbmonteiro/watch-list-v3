@@ -1,6 +1,6 @@
 # Build
 
-FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
+FROM mcr.microsoft.com/dotnet/sdk:10.0 AS build
 
 WORKDIR /src
 
@@ -21,7 +21,7 @@ RUN dotnet publish WatchList/WatchList.csproj \
 
 # Runtime
 
-FROM mcr.microsoft.com/dotnet/aspnet:8.0-noble-chiseled
+FROM mcr.microsoft.com/dotnet/aspnet:10.0-noble-chiseled
 
 WORKDIR /app
 

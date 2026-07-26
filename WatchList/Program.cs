@@ -4,7 +4,6 @@ using WatchList.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Services
 builder.Services
     .AddRazorComponents()
     .AddInteractiveServerComponents();
