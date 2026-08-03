@@ -27,7 +27,8 @@ public class FileService
             {
                 Name = line.Split('_')[0],
                 Type = line.Split('_')[1],
-                Progress = line.Split('_')[2]
+                Progress = line.Split('_')[2],
+                ImageUrl = line.Split('_')[3]
             };
 
             list.Add(inProgress);
