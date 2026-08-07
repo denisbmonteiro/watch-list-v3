@@ -63,6 +63,9 @@ else
         string? type = context.Type.ToLower();
         string? fileName = context.ImageUrl;
 
+        if (fileName.Equals("no-cover.jpg"))
+            return $"images/{fileName}";
+
         return $"images/{type}/{fileName}";
     }
 
