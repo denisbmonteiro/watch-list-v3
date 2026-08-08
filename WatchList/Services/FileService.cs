@@ -202,4 +202,14 @@ public class FileService
 
         return list.OrderBy(l => l.Name).ToList();
     }
+
+    private async Task<string[]> ReadFileAsync(string fileName)
+    {
+        var path = Path.Combine(_environment.WebRootPath, "AppData", fileName);
+
+        if (!File.Exists(path))
+            return [];
+
+        return await File.ReadAllLinesAsync(path);
+    }
 }
