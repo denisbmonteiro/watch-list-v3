@@ -13,28 +13,28 @@ public class FileService
 
     public async Task<List<InProgress>> ReadInProgressFileAsync()
     {
-        var path = Path.Combine(_environment.WebRootPath, "AppData", "index.txt");
+        var lines = await ReadFileAsync("index.txt");
         var list = new List<InProgress>();
 
-        if (!File.Exists(path))
-            return list;
-
-        var lines = await File.ReadAllLinesAsync(path);
-
-        foreach (var line in lines.Order())
+        foreach (var line in lines)
         {
+            var data = line.Split("___");
+
+            if (data.Length != 4)
+                continue;
+
             var inProgress = new InProgress
             {
-                Name = line.Split("___")[0],
-                Type = line.Split("___")[1],
-                Progress = line.Split("___")[2],
-                ImageUrl = line.Split("___")[3]
+                Name = data[0],
+                Type = data[1],
+                Progress = data[2],
+                ImageUrl = data[3]
             };
 
             list.Add(inProgress);
         }
 
-        return list;
+        return list.OrderBy(l => l.Name).ToList();
     }
 
     public async Task<List<Anime>> ReadAnimeFileAsync()
