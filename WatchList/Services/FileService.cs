@@ -39,15 +39,10 @@ public class FileService
 
     public async Task<List<Anime>> ReadAnimeFileAsync()
     {
-        var path = Path.Combine(_environment.WebRootPath, "AppData", "anime.txt");
+        var lines = await ReadFileAsync("anime.txt");
         var list = new List<Anime>();
 
-        if (!File.Exists(path))
-            return list;
-
-        var lines = await File.ReadAllLinesAsync(path);
-
-        foreach (var line in lines.Order())
+        foreach (var line in lines)
         {
             var anime = new Anime
             {
@@ -57,7 +52,7 @@ public class FileService
             list.Add(anime);
         }
 
-        return list;
+        return list.OrderBy(l => l.Name).ToList();
     }
 
     public async Task<List<Book>> ReadBookFileAsync()
