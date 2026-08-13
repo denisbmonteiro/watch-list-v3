@@ -18,7 +18,7 @@ else
 
         <HeaderContent>
             <MudTh Class="text-center w-10">#</MudTh>
-            <MudTh>Image</MudTh>
+            <MudTh Class="text-center w-15">Image</MudTh>
             <MudTh>Name</MudTh>
             <MudTh Class="text-center">Type</MudTh>
             <MudTh Class="text-center">Progress</MudTh>
@@ -27,7 +27,7 @@ else
         <RowTemplate>
             <MudTd Class="text-center">@GetRowNumber(context)</MudTd>
             <MudTd Class="text-center">
-                <MudImage Src="@GetImagePath(context)" Alt="Cover Art" Width="80" Height="120" Style="object-fit: cover; border-radius: 4px;"></MudImage>
+                <MudImage Src="@GetImagePath(context)" Alt=" " Width="80" Height="120" Style="object-fit: cover; border-radius: 4px;"></MudImage>
             </MudTd>
             <MudTd>@context.Name</MudTd>
             <MudTd Class="text-center">@context.Type</MudTd>
@@ -62,9 +62,6 @@ else
     {
         string? type = context.Type.ToLower();
         string? fileName = context.ImageUrl;
-
-        if (fileName.Equals("no-cover.jpg"))
-            return $"images/{fileName}";
 
         return $"images/{type}/{fileName}";
     }
