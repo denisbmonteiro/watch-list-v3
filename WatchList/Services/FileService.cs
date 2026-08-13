@@ -44,9 +44,12 @@ public class FileService
 
         foreach (var line in lines)
         {
+            var data = line.Split("___");
+
             var anime = new Anime
             {
-                Name = line
+                Name = data[0],
+                ImageUrl = data.Length > 1 ? data[1] : string.Empty
             };
 
             list.Add(anime);
