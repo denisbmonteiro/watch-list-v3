@@ -60,20 +60,17 @@ public class FileService
 
     public async Task<List<Book>> ReadBookFileAsync()
     {
-        var path = Path.Combine(_environment.WebRootPath, "AppData", "books.txt");
+        var lines = await ReadFileAsync("books.txt");
         var list = new List<Book>();
-
-        if (!File.Exists(path))
-            return list;
-
-        var lines = await File.ReadAllLinesAsync(path);
 
         foreach (var line in lines)
         {
+            var data = line.Split("___");
+
             var book = new Book
             {
-                Title = line.Split('_')[0],
-                Author = line.Split('_')[1]
+                Title = data[0],
+                Author = data.Length > 1 ? data[1] : string.Empty
             };
 
             list.Add(book);
