@@ -115,13 +115,8 @@ public class FileService
 
     public async Task<List<Movie>> ReadMovieFileAsync()
     {
-        var path = Path.Combine(_environment.WebRootPath, "AppData", FileNames.Movies);
+        var lines = await ReadFileAsync(FileNames.Movies);
         var list = new List<Movie>();
-
-        if (!File.Exists(path))
-            return list;
-
-        var lines = await File.ReadAllLinesAsync(path);
 
         foreach (var line in lines)
         {
