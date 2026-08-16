@@ -19,17 +19,14 @@ public class FileService
 
         foreach (var line in lines)
         {
-            var data = line.Split(FileHandling.SplitSeparator);
-
-            if (data.Length != 4)
-                continue;
+            var fields = line.Split(FileHandling.SplitSeparator);
 
             var inProgress = new InProgress
             {
-                Name = data[0],
-                Type = data[1],
-                Progress = data[2],
-                ImageUrl = data[3]
+                Name = fields.Length > 0 ? fields[0] : string.Empty,
+                Type = fields.Length > 1 ? fields[1] : string.Empty,
+                Progress = fields.Length > 2 ? fields[2] : string.Empty,
+                ImageUrl = fields.Length > 3 ? fields[3] : string.Empty
             };
 
             list.Add(inProgress);
@@ -45,12 +42,12 @@ public class FileService
 
         foreach (var line in lines)
         {
-            var data = line.Split(FileHandling.SplitSeparator);
+            var fields = line.Split(FileHandling.SplitSeparator);
 
             var anime = new Anime
             {
-                Name = data[0],
-                ImageUrl = data.Length > 1 ? data[1] : string.Empty
+                Name = fields.Length > 0 ? fields[0] : string.Empty,
+                ImageUrl = fields.Length > 1 ? fields[1] : string.Empty
             };
 
             list.Add(anime);
@@ -66,12 +63,12 @@ public class FileService
 
         foreach (var line in lines)
         {
-            var data = line.Split(FileHandling.SplitSeparator);
+            var fields = line.Split(FileHandling.SplitSeparator);
 
             var book = new Book
             {
-                Title = data[0],
-                Author = data.Length > 1 ? data[1] : string.Empty
+                Title = fields.Length > 0 ? fields[0] : string.Empty,
+                Author = fields.Length > 1 ? fields[1] : string.Empty
             };
 
             list.Add(book);
@@ -82,13 +79,8 @@ public class FileService
 
     public async Task<List<Game>> ReadGameFileAsync()
     {
-        var path = Path.Combine(_environment.WebRootPath, "AppData", FileNames.Games);
+        var lines = await ReadFileAsync(FileNames.Games);
         var list = new List<Game>();
-
-        if (!File.Exists(path))
-            return list;
-
-        var lines = await File.ReadAllLinesAsync(path);
 
         foreach (var line in lines)
         {
