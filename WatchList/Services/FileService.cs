@@ -155,20 +155,17 @@ public class FileService
 
     public async Task<List<Queue>> ReadQueueFileAsync()
     {
-        var path = Path.Combine(_environment.WebRootPath, "AppData", FileNames.Queue);
+        var lines = await ReadFileAsync(FileNames.Queue);
         var list = new List<Queue>();
-
-        if (!File.Exists(path))
-            return list;
-
-        var lines = await File.ReadAllLinesAsync(path);
 
         foreach (var line in lines)
         {
+            var fields = line.Split(FileHandling.SplitSeparator);
+
             var queue = new Queue
             {
-                Name = line.Split('_')[0],
-                Type = line.Split('_')[1]
+                Name = fields.Length > 0 ? fields[0] : string.Empty,
+                Type = fields.Length > 1 ? fields[1] : string.Empty
             };
 
             list.Add(queue);
