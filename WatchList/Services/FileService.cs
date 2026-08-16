@@ -97,13 +97,8 @@ public class FileService
 
     public async Task<List<Manga>> ReadMangaFileAsync()
     {
-        var path = Path.Combine(_environment.WebRootPath, "AppData", FileNames.Manga);
+        var lines = await ReadFileAsync(FileNames.Manga);
         var list = new List<Manga>();
-
-        if (!File.Exists(path))
-            return list;
-
-        var lines = await File.ReadAllLinesAsync(path);
 
         foreach (var line in lines)
         {
