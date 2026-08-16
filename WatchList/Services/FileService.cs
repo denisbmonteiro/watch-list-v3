@@ -150,22 +150,18 @@ public class FileService
 
     public async Task<List<Serie>> ReadSerieFileAsync()
     {
-        var path = Path.Combine(_environment.WebRootPath, "AppData", "series.txt");
+        var lines = await ReadFileAsync("series.txt");
         var list = new List<Serie>();
-
-        if (!File.Exists(path))
-            return list;
-
-        var lines = await File.ReadAllLinesAsync(path);
 
         foreach (var line in lines)
         {
-            var fields = line.Split('_');
+            var fields = line.Split("___");
 
             var serie = new Serie
             {
                 Name = fields.Length > 0 ? fields[0] : string.Empty,
-                Progress = fields.Length > 1 ? fields[1] : string.Empty
+                Progress = fields.Length > 1 ? fields[1] : string.Empty,
+                ImageUrl = fields.Length > 2 ? fields[2] : string.Empty
             };
 
             list.Add(serie);
