@@ -1,4 +1,5 @@
 ﻿using WatchList.Models;
+using WatchList.Constants;
 
 namespace WatchList.Services;
 
@@ -18,7 +19,7 @@ public class FileService
 
         foreach (var line in lines)
         {
-            var data = line.Split("___");
+            var data = line.Split(FileHandling.SplitSeparator);
 
             if (data.Length != 4)
                 continue;
@@ -44,7 +45,7 @@ public class FileService
 
         foreach (var line in lines)
         {
-            var data = line.Split("___");
+            var data = line.Split(FileHandling.SplitSeparator);
 
             var anime = new Anime
             {
@@ -65,7 +66,7 @@ public class FileService
 
         foreach (var line in lines)
         {
-            var data = line.Split("___");
+            var data = line.Split(FileHandling.SplitSeparator);
 
             var book = new Book
             {
@@ -155,7 +156,7 @@ public class FileService
 
         foreach (var line in lines)
         {
-            var fields = line.Split("___");
+            var fields = line.Split(FileHandling.SplitSeparator);
 
             var serie = new Serie
             {
