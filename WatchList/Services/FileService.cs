@@ -14,7 +14,7 @@ public class FileService
 
     public async Task<List<InProgress>> ReadInProgressFileAsync()
     {
-        var lines = await ReadFileAsync("index.txt");
+        var lines = await ReadFileAsync(FileNames.Index);
         var list = new List<InProgress>();
 
         foreach (var line in lines)
@@ -40,7 +40,7 @@ public class FileService
 
     public async Task<List<Anime>> ReadAnimeFileAsync()
     {
-        var lines = await ReadFileAsync("anime.txt");
+        var lines = await ReadFileAsync(FileNames.Anime);
         var list = new List<Anime>();
 
         foreach (var line in lines)
@@ -61,7 +61,7 @@ public class FileService
 
     public async Task<List<Book>> ReadBookFileAsync()
     {
-        var lines = await ReadFileAsync("books.txt");
+        var lines = await ReadFileAsync(FileNames.Books);
         var list = new List<Book>();
 
         foreach (var line in lines)
@@ -82,7 +82,7 @@ public class FileService
 
     public async Task<List<Game>> ReadGameFileAsync()
     {
-        var path = Path.Combine(_environment.WebRootPath, "AppData", "games.txt");
+        var path = Path.Combine(_environment.WebRootPath, "AppData", FileNames.Games);
         var list = new List<Game>();
 
         if (!File.Exists(path))
@@ -105,7 +105,7 @@ public class FileService
 
     public async Task<List<Manga>> ReadMangaFileAsync()
     {
-        var path = Path.Combine(_environment.WebRootPath, "AppData", "manga.txt");
+        var path = Path.Combine(_environment.WebRootPath, "AppData", FileNames.Manga);
         var list = new List<Manga>();
 
         if (!File.Exists(path))
@@ -128,7 +128,7 @@ public class FileService
 
     public async Task<List<Movie>> ReadMovieFileAsync()
     {
-        var path = Path.Combine(_environment.WebRootPath, "AppData", "movies.txt");
+        var path = Path.Combine(_environment.WebRootPath, "AppData", FileNames.Movies);
         var list = new List<Movie>();
 
         if (!File.Exists(path))
@@ -151,7 +151,7 @@ public class FileService
 
     public async Task<List<Serie>> ReadSerieFileAsync()
     {
-        var lines = await ReadFileAsync("series.txt");
+        var lines = await ReadFileAsync(FileNames.Series);
         var list = new List<Serie>();
 
         foreach (var line in lines)
@@ -173,7 +173,7 @@ public class FileService
 
     public async Task<List<Queue>> ReadQueueFileAsync()
     {
-        var path = Path.Combine(_environment.WebRootPath, "AppData", "queue.txt");
+        var path = Path.Combine(_environment.WebRootPath, "AppData", FileNames.Queue);
         var list = new List<Queue>();
 
         if (!File.Exists(path))
