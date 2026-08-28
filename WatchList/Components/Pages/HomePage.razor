@@ -27,7 +27,9 @@ else
         <RowTemplate>
             <MudTd Class="text-center">@GetRowNumber(context)</MudTd>
             <MudTd Class="text-center">
-                <MudImage Src="@GetImagePath(context)" Alt=" " Width="80" Height="120" Style="object-fit: cover; border-radius: 4px;"></MudImage>
+                <div class="cover-thumbnail" @onclick="@(() => OpenImage(context))">
+                    <MudImage Src="@GetImagePath(context)" Alt=" " Width="80" Height="120" Style="object-fit: cover; border-radius: 4px;"></MudImage>
+                </div>
             </MudTd>
             <MudTd>@context.Name</MudTd>
             <MudTd Class="text-center">@context.Type</MudTd>
@@ -38,12 +40,36 @@ else
             <MudTablePager PageSizeOptions="new int[] { 20, 50, 100, int.MaxValue }" />
         </PagerContent>
     </MudTable>
+
+    <MudDialog @bind-IsVisible="isImageVisible" Options="imageDialogOptions">
+        <TitleContent>
+            <MudText Typo="Typo.subtitle1" Class="cover-preview-title">@selected?.Name</MudText>
+        </TitleContent>
+        <DialogContent>
+            @if (selected is not null)
+            {
+                <div class="cover-preview" @onclick="@(() => isImageVisible = false)">
+                    <MudImage Src="@GetImagePath(selected)" Alt=" "></MudImage>
+                </div>
+            }
+        </DialogContent>
+    </MudDialog>
 }
 
 @code
 {
     private List<InProgress>? list;
+    private InProgress? selected;
     private string searchString = "";
+    private bool isImageVisible;
+
+    private readonly DialogOptions imageDialogOptions = new()
+    {
+        MaxWidth = MaxWidth.False,
+        NoHeader = false,
+        CloseButton = true,
+        CloseOnEscapeKey = true
+    };
 
     protected override async Task OnInitializedAsync()
     {
@@ -64,6 +90,12 @@ else
         string? fileName = context.ImageUrl;
 
         return $"images/{type}/{fileName}";
+    }
+
+    private void OpenImage(InProgress context)
+    {
+        selected = context;
+        isImageVisible = true;
     }
 
     private bool FilterFunc1(InProgress element) => FilterFunc(element, searchString);

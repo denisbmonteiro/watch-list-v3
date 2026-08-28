@@ -9,3 +9,30 @@
 .w-15 {
     width: 15%;
 }
+
+.cover-thumbnail {
+    cursor: zoom-in;
+    display: inline-block;
+    line-height: 0;
+}
+
+.cover-preview {
+    cursor: zoom-out;
+    display: inline-block;
+    line-height: 0;
+}
+
+.cover-preview-title {
+    max-width: min(420px, 80vw);
+    padding-right: 32px;
+    overflow-wrap: anywhere;
+}
+
+.cover-preview img {
+    display: block;
+    width: auto;
+    height: auto;
+    max-width: 90vw;
+    max-height: 90vh;
+    border-radius: 4px;
+}
