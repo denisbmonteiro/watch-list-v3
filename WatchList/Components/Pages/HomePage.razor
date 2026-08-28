@@ -41,7 +41,7 @@ else
         </PagerContent>
     </MudTable>
 
-    <MudDialog @bind-IsVisible="isImageVisible" Options="imageDialogOptions">
+    <MudDialog @bind-IsVisible="isImageVisible" Options="imageDialogOptions" Class="cover-dialog" ClassContent="cover-dialog-content">
         <TitleContent>
             <MudText Typo="Typo.subtitle1" Class="cover-preview-title">@selected?.Name</MudText>
         </TitleContent>

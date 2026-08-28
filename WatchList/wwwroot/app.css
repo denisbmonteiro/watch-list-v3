@@ -18,7 +18,8 @@
 
 .cover-preview {
     cursor: zoom-out;
-    display: inline-block;
+    display: flex;
+    justify-content: center;
     line-height: 0;
 }
 
@@ -28,11 +29,45 @@
     overflow-wrap: anywhere;
 }
 
+/* --cover-gap: total space left around the dialog
+   --cover-pad-x: horizontal padding of the dialog content
+   --cover-chrome-y: title bar + vertical padding of the dialog content */
+.cover-dialog.mud-dialog {
+    --cover-gap: 64px;
+    --cover-pad-x: 48px;
+    --cover-chrome-y: 76px;
+    max-width: calc(100vw - var(--cover-gap));
+    max-height: calc(100vh - var(--cover-gap));
+    max-height: calc(100dvh - var(--cover-gap));
+    overflow: hidden;
+}
+
+.cover-dialog-content.mud-dialog-content {
+    overflow: hidden;
+}
+
 .cover-preview img {
     display: block;
     width: auto;
     height: auto;
-    max-width: 90vw;
-    max-height: 90vh;
+    max-width: calc(100vw - var(--cover-gap) - var(--cover-pad-x));
+    max-height: calc(100vh - var(--cover-gap) - var(--cover-chrome-y));
+    max-height: calc(100dvh - var(--cover-gap) - var(--cover-chrome-y));
     border-radius: 4px;
+}
+
+@media (max-width: 600px) {
+    .cover-dialog.mud-dialog {
+        --cover-gap: 16px;
+        --cover-pad-x: 16px;
+        --cover-chrome-y: 60px;
+    }
+
+    .cover-dialog .mud-dialog-title {
+        padding: 12px 16px;
+    }
+
+    .cover-dialog-content.mud-dialog-content {
+        padding: 4px 8px 8px;
+    }
 }
