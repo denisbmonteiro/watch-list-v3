@@ -18,26 +18,26 @@ ARQ___arq.jpg
 Ava___ava.jpg
 Bakemono no Ko___bakemono-no-ko.jpg
 Battleship___battleship.jpg
-Beaultiful Disaster
-Big Game
-Black and Blue
-Black Death
-Blade Runner 2049
-Central Intelligence
-Chuunibyou demo Koi ga Shitai! Takanashi Rikka Kai
-Citizen Gangster
-Code 8
-Code Geass: Fukkatsu no Lelouch
-Constantine
-Cosmic Sin
-Death Wish
-Despicable Me
-District 9
-Django Unchained
-Doctor Strange (2016)
-Don't Look Up
-Dracula Untold
-Dune: Part One
+Beautiful Disaster___beautiful-disaster.jpg
+Big Game___big-game.jpg
+Black and Blue___black-and-blue.jpg
+Black Death___black-death.jpg
+Blade Runner 2049___blade-runner-2049.jpg
+Central Intelligence___central-intelligence.jpg
+Chuunibyou demo Koi ga Shitai! Takanashi Rikka Kai___chuunibyou-demo-koi-ga-shitai-takanashi-rikka-kai.jpg
+Citizen Gangster___citizen-gangster.jpg
+Code 8___code-8.jpg
+Code Geass: Fukkatsu no Lelouch___code-geass-fukkatsu-no-lelouch.jpg
+Constantine___constantine.jpg
+Cosmic Sin___cosmic-sin.jpg
+Death Wish___death-wish.jpg
+Despicable Me___despicable-me.jpg
+District 9___district-9.jpg
+Django Unchained___django-unchained.jpg
+Doctor Strange (2016)___doctor-strange-2016.jpg
+Don't Look Up___dont-look-up.jpg
+Dracula Untold___dracula-untold.jpg
+Dune: Part One___dune-part-one.jpg
 Edge of Tomorrow (2014)
 Eiga Koe no Katachi
 Eiga Yuru Camp
