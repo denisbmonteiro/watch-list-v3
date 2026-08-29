@@ -193,6 +193,9 @@ Sobibor
 Solomon Kane
 Source Code
 Spectral
+Spider-Man
+Spider-Man 2
+Spider-Man 3
 Star Wars Episode I: The Clone Wars
 Star Wars Episode II: Attack of the Clones
 Star Wars Episode III: Revenge of the Sith
@@ -213,6 +216,7 @@ Tenki no Ko
 That's My Boy
 The Accountant
 The Adjustment Bureau
+The Amazing Spider-Man
 The Avengers
 The Big Short
 The Book of Eli
