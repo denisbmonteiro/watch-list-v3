@@ -29,9 +29,6 @@
     overflow-wrap: anywhere;
 }
 
-/* --cover-gap: total space left around the dialog
-   --cover-pad-x: horizontal padding of the dialog content
-   --cover-chrome-y: title bar + vertical padding of the dialog content */
 .cover-dialog.mud-dialog {
     --cover-gap: 64px;
     --cover-pad-x: 48px;
