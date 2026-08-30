@@ -88,36 +88,36 @@ Inception___inception.jpg
 Iron Man___iron-man.jpg
 Iron Man 2___iron-man-2.jpg
 Iron Man 3___iron-man-3.jpg
-Jaula
-John Wick
-John Wick: Chapter 2
-John Wick: Chapter 3 - Parabellum
-Joker (2019)
-Jumper
-Kaguya-sama wa Kokurasetai: First Kiss wa Owaranai
-Kaze Tachinu
-Kick-Ass
-Killer Elite
-Kimi no Na wa.
-Kimi no Suizou o Tabetai
-King of Killers
-Kino no Tabi: Nanika o Suru Tame ni - Life Goes On.
-Kino no Tabi: The Beautiful World - Byouki no Kuni - For You
-Knives Out
-Kokoro ga Sakebitagatterunda
-Kono Subarashii Sekai ni Shukufuku wo! Kurenai Densetsu
-Kyoukai no Kanata: I'll Be Here - Kako-hen
-Kyoukai no Kanata: I'll Be Here - Mirai-hen
-Law Abiding Citizen
-Let's Be Cops
-Limitless
-London Has Fallen
-Lone Survivor
-Looper
-Lucy
-Machine Gun Preacher
-Made in Abyss: Dawn of the Deep Soul
-Made in Abyss: Journey's Dawn
+Jaula___jaula.jpg
+John Wick___john-wick.jpg
+John Wick: Chapter 2___john-wick-chapter-2.jpg
+John Wick: Chapter 3 - Parabellum___john-wick-chapter-3-parabellum.jpg
+Joker (2019)___joker-2019.jpg
+Jumper___jumper.jpg
+Kaguya-sama wa Kokurasetai: First Kiss wa Owaranai___kaguya-sama-wa-kokurasetai-first-kiss-wa-owaranai.jpg
+Kaze Tachinu___kaze-tachinu.jpg
+Kick-Ass___kick-ass.jpg
+Killer Elite___killer-elite.jpg
+Kimi no Na wa.___kimi-no-na-wa.jpg
+Kimi no Suizou o Tabetai___kimi-no-suizou-o-tabetai.jpg
+King of Killers___king-of-killers.jpg
+Kino no Tabi: Nanika o Suru Tame ni - Life Goes On.___kino-no-tabi-nanika-o-suru-tame-ni-life-goes-on.jpg
+Kino no Tabi: The Beautiful World - Byouki no Kuni - For You___kino-no-tabi-the-beautiful-world-byouki-no-kuni-for-you.jpg
+Knives Out___knives-out.jpg
+Kokoro ga Sakebitagatterunda___kokoro-ga-sakebitagatterunda.jpg
+Kono Subarashii Sekai ni Shukufuku wo! Kurenai Densetsu___kono-subarashii-sekai-ni-shukufuku-wo-kurenai-densetsu.jpg
+Kyoukai no Kanata: I'll Be Here - Kako-hen___kyoukai-no-kanata-ill-be-here-kako-hen.jpg
+Kyoukai no Kanata: I'll Be Here - Mirai-hen___kyoukai-no-kanata-ill-be-here-mirai-hen.jpg
+Law Abiding Citizen___law-abiding-citizen.jpg
+Let's Be Cops___lets-be-cops.jpg
+Limitless___limitless.jpg
+London Has Fallen___london-has-fallen.jpg
+Lone Survivor___lone-survivor.jpg
+Looper___looper.jpg
+Lucy___lucy.jpg
+Machine Gun Preacher___machine-gun-preacher.jpg
+Made in Abyss: Dawn of the Deep Soul___made-in-abyss-dawn-of-the-deep-soul.jpg
+Made in Abyss: Journey's Dawn___made-in-abyss-journeys-dawn.jpg
 Made in Abyss: Wandering Twilight
 Meet The Spartans
 Men in Black
