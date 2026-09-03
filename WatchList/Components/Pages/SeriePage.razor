@@ -27,7 +27,7 @@ else
             <MudTd Class="text-center">@GetRowNumber(context)</MudTd>
             <MudTd Class="text-center">
                 <div class="cover-thumbnail" @onclick="@(() => OpenImage(context))">
-                    <MudImage Src="@GetImagePath(context)" Alt=" " Width="80" Height="120" Style="object-fit: cover; border-radius: 4px;"></MudImage>
+                    <MudImage Src="@GetImagePath(context)" Alt=" " Width="80" Height="120" ObjectFit="ObjectFit.Cover" Style="border-radius: 4px;"></MudImage>
                 </div>
             </MudTd>
             <MudTd>@context.Name</MudTd>
@@ -39,7 +39,7 @@ else
         </PagerContent>
     </MudTable>
 
-    <MudDialog @bind-IsVisible="isImageVisible" Options="imageDialogOptions" Class="cover-dialog" ClassContent="cover-dialog-content">
+    <MudDialog @bind-Visible="isImageVisible" Options="imageDialogOptions" Class="cover-dialog" ContentClass="cover-dialog-content">
         <TitleContent>
             <MudText Typo="Typo.subtitle1" Class="cover-preview-title">@selected?.Name</MudText>
         </TitleContent>

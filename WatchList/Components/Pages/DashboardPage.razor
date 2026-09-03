@@ -11,7 +11,7 @@
 }
 else
 {
-    <MudGrid Class="mb-2">
+    <MudGrid Class="mb-5">
         <MudItem xs="12" sm="6" md="4">
             <MudPaper Elevation="2" Class="pa-4 d-flex align-center justify-center" Style="height: 100px;">
                 <MudText Typo="Typo.h5">In Progress: @data[0]</MudText>
@@ -35,13 +35,16 @@ else
             <MudText Typo="Typo.h5" Class="text-center mb-2">@CategorySelected(indexSelected)</MudText>
         }
 
-        <MudChart ChartType="ChartType.Pie" InputData="@data" @bind-SelectedIndex="indexSelected" InputLabels="@labels" Width="300px" Height="300px" />
+        <div class="dashboard-chart">
+            <MudChart T="double" ChartType="ChartType.Pie" ChartSeries="@series" @bind-SelectedIndex="indexSelected" ChartLabels="@labels" Width="300px" Height="300px" />
+        </div>
     </MudPaper>
 }
 
 @code
 {
     private double[]? data = null;
+    private List<ChartSeries<double>> series = new();
     private int indexSelected = -1;
     private string[] labels = { "In Progress", "Anime", "Book", "Game", "Manga", "Movie", "Queue", "Serie" };
 
@@ -66,6 +69,11 @@ else
             movieList.Count,
             queueList.Count,
             serieList.Count
+        };
+
+        series = new List<ChartSeries<double>>
+        {
+            new ChartSeries<double> { Data = data }
         };
     }
 
