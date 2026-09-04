@@ -95,8 +95,8 @@ else
     };
 
     private int page;
-    private int pageSize = 6;
-    private static readonly int[] pageSizeOptions = [6, 12, 24, 48, int.MaxValue];
+    private int pageSize = 12;
+    private static readonly int[] pageSizeOptions = [12, 24, 48, int.MaxValue];
 
     private string SearchString
     {
@@ -143,11 +143,11 @@ else
     private static Color GetTypeColor(string type) => type.ToLower() switch
     {
         "anime" => Color.Primary,
+        "book" => Color.Success,
         "manga" => Color.Secondary,
-        "serie" or "series" => Color.Info,
-        "movie" or "movies" => Color.Warning,
-        "book" or "books" => Color.Success,
-        "game" or "games" => Color.Tertiary,
+        "movie" => Color.Warning,
+        "series" => Color.Info,
+        "game" => Color.Tertiary,
         _ => Color.Default
     };
 
