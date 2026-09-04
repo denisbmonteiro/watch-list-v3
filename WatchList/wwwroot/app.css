@@ -166,6 +166,11 @@
     flex-wrap: nowrap;
 }
 
+.scroll-to-top-offset.mud-scroll-to-top.visible,
+.scroll-to-top-offset.mud-scroll-to-top.hidden {
+    bottom: 120px;
+}
+
 @media (max-width: 600px) {
     .cover-dialog.mud-dialog {
         --cover-gap: 16px;
@@ -191,5 +196,10 @@
 
     .cover-search {
         width: 100%;
+    }
+
+    .scroll-to-top-offset.mud-scroll-to-top.visible,
+    .scroll-to-top-offset.mud-scroll-to-top.hidden {
+        bottom: 168px;
     }
 }
