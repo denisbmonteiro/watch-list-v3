@@ -68,6 +68,104 @@
     padding-bottom: 0 !important;
 }
 
+.cover-card {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    overflow: hidden;
+    transition: transform .15s ease, box-shadow .15s ease;
+}
+
+.cover-card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--mud-elevation-8);
+}
+
+.cover-card-media {
+    position: relative;
+    cursor: zoom-in;
+    line-height: 0;
+}
+
+.cover-card-media img {
+    display: block;
+    width: 100%;
+    aspect-ratio: 2 / 3;
+    object-fit: cover;
+}
+
+.cover-card-type.mud-chip {
+    position: absolute !important;
+    top: 8px;
+    left: 8px;
+    z-index: 1;
+    margin: 0;
+    height: 22px;
+    font-size: .7rem;
+    text-transform: capitalize;
+    opacity: .92;
+}
+
+.cover-card-content.mud-card-content {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    flex-grow: 1;
+    padding: 10px 12px 12px;
+}
+
+.cover-card-title {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    line-height: 1.3;
+    min-height: 2.6em;
+    overflow-wrap: anywhere;
+}
+
+.cover-card-progress {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    margin-top: auto;
+    color: var(--mud-palette-text-secondary);
+}
+
+.cover-card-progress .mud-icon-root {
+    font-size: 1rem;
+}
+
+.cover-card-count {
+    color: var(--mud-palette-text-secondary);
+}
+
+.cover-search {
+    flex: 0 0 auto;
+    width: 260px;
+    max-width: 100%;
+}
+
+.cover-search .mud-input-slot {
+    height: 32px;
+    font-size: .875rem;
+}
+
+.cover-search .mud-input-adornment .mud-icon-root {
+    font-size: 1.1rem;
+}
+
+.cover-pager .mud-select {
+    flex: 0 0 auto;
+    width: 96px;
+}
+
+.cover-pager-controls {
+    flex: 0 0 auto;
+    flex-wrap: nowrap;
+}
+
 @media (max-width: 600px) {
     .cover-dialog.mud-dialog {
         --cover-gap: 16px;
@@ -81,5 +179,17 @@
 
     .cover-dialog-content.mud-dialog-content {
         padding: 4px 8px 8px;
+    }
+
+    .cover-card-content.mud-card-content {
+        padding: 8px 10px 10px;
+    }
+
+    .cover-card-title {
+        font-size: .8rem;
+    }
+
+    .cover-search {
+        width: 100%;
     }
 }
