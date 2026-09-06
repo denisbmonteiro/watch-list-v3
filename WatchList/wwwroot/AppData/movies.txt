@@ -196,6 +196,7 @@ Spectral___spectral.jpg
 Spider-Man___spider-man.jpg
 Spider-Man 2___spider-man-2.jpg
 Spider-Man 3___spider-man-3.jpg
+Spider-Man: Homecoming___spider-man-homecoming.jpg
 Star Wars Episode I: The Phantom Menace___star-wars-episode-i-the-phantom-menace.jpg
 Star Wars Episode II: Attack of the Clones___star-wars-episode-ii-attack-of-the-clones.jpg
 Star Wars Episode III: Revenge of the Sith___star-wars-episode-iii-revenge-of-the-sith.jpg
