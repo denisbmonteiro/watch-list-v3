@@ -27,11 +27,22 @@ else
             {
                 <MudItem xs="6" sm="4" md="3" lg="2" Class="d-flex">
                     <MudCard Class="cover-card" Elevation="2">
-                        <div class="cover-card-media" @onclick="@(() => OpenImage(item))">
-                            <MudImage Src="@GetImagePath(item)" Alt=" " ObjectFit="ObjectFit.Cover" />
-                            <MudChip T="string" Size="Size.Small" Color="@GetTypeColor(item.Type)" Variant="Variant.Filled"
-                                Class="cover-card-type">@item.Type</MudChip>
-                        </div>
+                        @if (HasImage(item))
+                        {
+                            <div class="cover-card-media" @onclick="@(() => OpenImage(item))">
+                                <MudImage Src="@GetImagePath(item)" Alt=" " ObjectFit="ObjectFit.Cover" />
+                                <MudChip T="string" Size="Size.Small" Color="@GetTypeColor(item.Type)" Variant="Variant.Filled"
+                                    Class="cover-card-type">@item.Type</MudChip>
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="cover-card-placeholder">
+                                <MudIcon Icon="@Icons.Material.Filled.Tv" />
+                                <MudChip T="string" Size="Size.Small" Color="@GetTypeColor(item.Type)" Variant="Variant.Filled"
+                                    Class="cover-card-type">@item.Type</MudChip>
+                            </div>
+                        }
                         <MudCardContent Class="cover-card-content">
                             <MudText Typo="Typo.subtitle2" Class="cover-card-title" title="@item.Name">@item.Name</MudText>
                             <MudText Typo="Typo.caption" Class="cover-card-progress">
@@ -131,6 +142,8 @@ else
     {
         list = await FileService.ReadInProgressFileAsync();
     }
+
+    private static bool HasImage(InProgress context) => !string.IsNullOrWhiteSpace(context.ImageUrl);
 
     private string GetImagePath(InProgress context)
     {
