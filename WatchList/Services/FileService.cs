@@ -68,7 +68,8 @@ public class FileService
             var book = new Book
             {
                 Title = fields.Length > 0 ? fields[0] : string.Empty,
-                Author = fields.Length > 1 ? fields[1] : string.Empty
+                Author = fields.Length > 1 ? fields[1] : string.Empty,
+                ImageUrl = fields.Length > 2 ? fields[2] : string.Empty
             };
 
             list.Add(book);
