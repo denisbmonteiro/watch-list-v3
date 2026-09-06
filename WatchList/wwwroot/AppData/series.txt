@@ -9,26 +9,26 @@ Halo___S01E09___halo.jpg
 Heroes___S04E18___heroes.jpg
 Heroes Reborn___S01E13___heroes-reborn.jpg
 House of the Dragon___S03E08___house-of-the-dragon.jpg
-Limitless___S01E22
-Lost in Space___S02E00
-Mr. Robot___S04E13
-Naked and Afraid___S10E08
-O Mecanismo___S01E08
-P.O.L.I.C.I.A___S04E13
-Reacher___S03E08
-Sebastian Fitzek's Therapy___S01E06
-Shooter___S03E13
-Sons of Anarchy___S07E13
-Spartacus_S03E10
-Spartacus: Gods of the Arena___S01E06
-The Boys___S03E08
-The Forest___S01E06
-The Last of Us___S01E09
-The Mentalist___S07E13
-The Punisher___S02E13
-The Snow Girl___S01E06
-The Terminal List___S01E08
-The Walking Dead___S11E24
+Limitless___S01E22___limitless.jpg
+Lost in Space___S01E10___lost-in-space.jpg
+Mr. Robot___S04E13___mr-robot.jpg
+Naked and Afraid___S10E08___naked-and-afraid.jpg
+O Mecanismo___S01E08___o-mecanismo.jpg
+P.O.L.I.C.I.A___S04E13___p-o-l-i-c-i-a.jpg
+Reacher___S03E08___reacher.jpg
+Sebastian Fitzek's Therapy___S01E06___sebastian-fitzeks-therapy.jpg
+Shooter___S03E13___shooter.jpg
+Sons of Anarchy___S07E13___sons-of-anarchy.jpg
+Spartacus___S03E10___spartacus.jpg
+Spartacus: Gods of the Arena___S01E06___spartacus-gods-of-the-arena.jpg
+The Boys___S03E08___the-boys.jpg
+The Forest___S01E06___the-forest.jpg
+The Last of Us___S01E09___the-last-of-us.jpg
+The Mentalist___S07E13___the-mentalist.jpg
+The Punisher___S02E13___the-punisher.jpg
+The Snow Girl___S01E06___the-snow-girl.jpg
+The Terminal List___S01E08___the-terminal-list.jpg
+The Walking Dead___S11E24___the-walking-dead.jpg
 The Walking Dead: Daryl Dixon___S03E07
 The Walking Dead: Dead City___S02E08
 The Walking Dead: The Ones Who Live___S01E06
