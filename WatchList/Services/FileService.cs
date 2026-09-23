@@ -3,7 +3,7 @@ using WatchList.Constants;
 
 namespace WatchList.Services;
 
-public class FileService
+public class FileService : IFileService
 {
     private readonly IWebHostEnvironment _environment;
 

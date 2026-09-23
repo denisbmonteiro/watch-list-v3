@@ -9,7 +9,7 @@ builder.Services
     .AddInteractiveServerComponents();
 
 builder.Services.AddMudServices();
-builder.Services.AddSingleton<FileService>();
+builder.Services.AddSingleton<IFileService, FileService>();
 
 var app = builder.Build();
 
