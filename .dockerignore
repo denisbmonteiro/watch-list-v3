@@ -19,7 +19,6 @@
 .env.local
 
 README.md
-.editorconfig
 
 Dockerfile*
 docker-compose*

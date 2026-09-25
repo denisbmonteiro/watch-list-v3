@@ -5,7 +5,7 @@ FROM mcr.microsoft.com/dotnet/sdk:10.0 AS build
 WORKDIR /src
 
 # Só o que o restore precisa, para manter a camada em cache enquanto nenhum .csproj mudar.
-COPY WatchList.slnx ./
+COPY global.json Directory.Build.props Directory.Packages.props WatchList.slnx ./
 COPY src/WatchList.Presentation/WatchList.Presentation.csproj src/WatchList.Presentation/
 
 RUN dotnet restore WatchList.slnx
