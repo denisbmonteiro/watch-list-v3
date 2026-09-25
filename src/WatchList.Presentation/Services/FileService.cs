@@ -1,7 +1,7 @@
-﻿using WatchList.Models;
-using WatchList.Constants;
+﻿using WatchList.Presentation.Models;
+using WatchList.Presentation.Constants;
 
-namespace WatchList.Services;
+namespace WatchList.Presentation.Services;
 
 public class FileService : IFileService
 {

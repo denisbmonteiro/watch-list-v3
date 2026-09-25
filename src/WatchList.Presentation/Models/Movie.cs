@@ -1,4 +1,4 @@
-﻿namespace WatchList.Models;
+﻿namespace WatchList.Presentation.Models;
 
 public class Movie
 {

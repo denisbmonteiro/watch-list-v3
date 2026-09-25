@@ -1,4 +1,4 @@
-namespace WatchList.Constants;
+namespace WatchList.Presentation.Constants;
 
 public static class FileNames
 {

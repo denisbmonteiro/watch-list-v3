@@ -1,6 +1,6 @@
 using MudBlazor.Services;
-using WatchList.Components;
-using WatchList.Services;
+using WatchList.Presentation.Components;
+using WatchList.Presentation.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
