@@ -4,15 +4,17 @@ FROM mcr.microsoft.com/dotnet/sdk:10.0 AS build
 
 WORKDIR /src
 
-COPY WatchList.sln .
-COPY WatchList/WatchList.csproj WatchList/
+# Só o que o restore precisa, para manter a camada em cache enquanto nenhum .csproj mudar.
+COPY global.json Directory.Build.props Directory.Packages.props WatchList.slnx ./
+COPY src/WatchList.Presentation/WatchList.Presentation.csproj src/WatchList.Presentation/
 
-RUN dotnet restore
+RUN dotnet restore WatchList.slnx
 
 COPY . .
 
-RUN dotnet publish WatchList/WatchList.csproj \
+RUN dotnet publish src/WatchList.Presentation/WatchList.Presentation.csproj \
     -c Release \
+    --no-restore \
     -o /app/publish
 
 # Runtime
@@ -30,4 +32,4 @@ EXPOSE 8080
 
 USER app
 
-ENTRYPOINT ["dotnet", "WatchList.dll"]
+ENTRYPOINT ["dotnet", "WatchList.Presentation.dll"]

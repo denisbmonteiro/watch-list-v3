@@ -40,7 +40,7 @@ o `.txt` normalmente não muda (o slug já está lá), só as imagens.
 
 # AS TRÊS LISTAS
 
-Os caminhos abaixo são todos relativos a `WatchList/wwwroot/`.
+Os caminhos abaixo são todos relativos a `src/WatchList.Presentation/wwwroot/`.
 
 |                    | Filmes                          | Séries                                  | Animes                                        |
 |--------------------|---------------------------------|-----------------------------------------|-----------------------------------------------|
@@ -81,7 +81,7 @@ se eu pedir.
 
 # A QUARTA LISTA: A HOMEPAGE (`index.txt`)
 
-`WatchList/wwwroot/AppData/index.txt` **não é uma lista de capas para esta tarefa** — é o
+`src/WatchList.Presentation/wwwroot/AppData/index.txt` **não é uma lista de capas para esta tarefa** — é o
 que aparece na homepage, o que eu estou assistindo/lendo agora. Nunca peça leva dele nem
 edite esse arquivo. Ele importa aqui por um motivo só: **as imagens dele moram nos mesmos
 diretórios das outras listas**, então ele muda a checagem de órfão.
@@ -108,7 +108,7 @@ do título enorme) — **é ele quem manda para aquele arquivo**, não a regra.
 A checagem de órfão correta une as duas fontes antes de comparar:
 
 ```bash
-cd WatchList/wwwroot
+cd src/WatchList.Presentation/wwwroot
 comm -23 <(ls images/anime | sort) \
   <(cat <(awk -F'___' 'NF==2 {gsub(/\r/,"",$2); print $2}' AppData/anime.txt) \
         <(awk -F'___' 'NF==4 && $2=="Anime" {gsub(/\r/,"",$4); print $4}' AppData/index.txt) \
@@ -1231,8 +1231,8 @@ vez de inferir**, igual ao `´`/`″` do Dog Days.
 
 # SAÍDA
 
-- Salve cada imagem em `WatchList/wwwroot/images/movie/<slug>.jpg` (filme) ou
-  `WatchList/wwwroot/images/series/<slug>.jpg` (série).
+- Salve cada imagem em `src/WatchList.Presentation/wwwroot/images/movie/<slug>.jpg` (filme) ou
+  `src/WatchList.Presentation/wwwroot/images/series/<slug>.jpg` (série).
 - Troque a linha correspondente do `.txt` de `Título` para `Título___slug.jpg`
   (filme) ou de `Título___SxxEyy` para `Título___SxxEyy___slug.jpg` (série),
   preservando o título e o episódio exatamente como estão escritos (inclusive typos
@@ -1277,7 +1277,7 @@ Antes de baixar a leva, reproduza uma capa que já existe pelo caminho do TMDB:
 https://image.tmdb.org/t/p/original/jSziioSwPVrOy9Yow3XhWIBDjq1.jpg   (Fight Club, TMDB 550)
 convert <original> -resize 400x -quality 82 fight-club.jpg
 ```
-tem que sair idêntico a `WatchList/wwwroot/images/movie/fight-club.jpg` — 400x600,
+tem que sair idêntico a `src/WatchList.Presentation/wwwroot/images/movie/fight-club.jpg` — 400x600,
 **47790 bytes** com ImageMagick 7.1.2 Q16.
 
 Esse número foi **reconferido em 2026-08-29 e de novo em 2026-09-05** (`cmp` byte a

@@ -146,7 +146,7 @@ def validate():
         sys.exit("validacao abortada: nao baixou o original")
     convert(orig, out)
     size = os.path.getsize(out)
-    ref = os.path.join(REPO, "WatchList/wwwroot/images/movie/fight-club.jpg")
+    ref = os.path.join(REPO, "src/WatchList.Presentation/wwwroot/images/movie/fight-club.jpg")
     same = subprocess.run(["cmp", "-s", out, ref]).returncode == 0 if os.path.exists(ref) else None
     print(f"  {out}  {size} bytes (esperado 47790)  identico ao do repo: {same}")
     if size != 47790:
@@ -262,7 +262,7 @@ def cmd_install(file_path, slug, lista, size="original", force=False):
     if lista not in DIRS:
         sys.exit(f"ERRO: lista deve ser {'/'.join(DIRS)}")
     check(slug=slug, file_path=file_path, size=size)
-    imgdir = os.path.join(REPO, "WatchList/wwwroot", DIRS[lista])
+    imgdir = os.path.join(REPO, "src/WatchList.Presentation/wwwroot", DIRS[lista])
     dest = os.path.join(imgdir, f"{slug}.jpg")
     if os.path.dirname(os.path.realpath(dest)) != os.path.realpath(imgdir):
         sys.exit("ERRO: destino escaparia do diretorio de imagens")

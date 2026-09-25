@@ -1,6 +1,6 @@
-using WatchList.Models;
+using WatchList.Presentation.Models;
 
-namespace WatchList.Services;
+namespace WatchList.Presentation.Services;
 
 public interface IFileService
 {
