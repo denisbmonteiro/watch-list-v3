@@ -3,6 +3,7 @@
   <PropertyGroup>
     <RootNamespace>WatchList.Presentation</RootNamespace>
     <UserSecretsId>aspnet-WatchList-be8fb7ac-113c-4648-9cef-867a93b91410</UserSecretsId>
+    <RequiresAspNetWebAssets>true</RequiresAspNetWebAssets>
   </PropertyGroup>
 
   <ItemGroup>
