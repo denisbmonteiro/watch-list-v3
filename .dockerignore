@@ -1,6 +1,10 @@
 **/bin/
 **/obj/
 **/node_modules/
+**/*.user
+**/Properties/launchSettings.json
+**/Properties/serviceDependencies.json
+**/Properties/PublishProfiles/
 
 .git
 .gitignore
@@ -10,19 +14,23 @@
 .vscode
 .vscode-test
 *.code-workspace
+.claude/
+docs/
 
 .github
 .gitlab-ci.yml
 .circleci
 
-.DS_Store
-.env.local
-
-README.md
+**/.DS_Store
+**/Thumbs.db
+**/*.swp
+**/*~
+.env
+.env.*
 
 Dockerfile*
 docker-compose*
+.dockerignore
 
-*.md
-*.log
-test/
+**/*.md
+**/*.log
