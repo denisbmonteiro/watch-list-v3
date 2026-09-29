@@ -1,6 +1,6 @@
 # Plano de separação em camadas — WatchList
 
-> Status: **em andamento** (fase 0 concluída) · Data: 23/09/2026 · Alvo: .NET 10 / C# 14
+> Status: **em andamento** (fases 0 e 1 concluídas) · Data: 23/09/2026 · Alvo: .NET 10 / C# 14
 
 Este documento planeja a separação do projeto único `WatchList` em projetos distintos dentro da
 mesma solution, seguindo Clean Architecture, DDD (na medida certa para o tamanho do domínio),
@@ -72,7 +72,7 @@ Código genérico, sem conhecimento do negócio, reaproveitável em qualquer cam
   sem usar exceção como fluxo de controle.
 - `Extensions/StringExtensions.cs` — `ContainsIgnoreCase`, `ToSlug` (a mesma regra de slug que a
   skill `update-covers` usa para nome de capa).
-- `Extensions/EnumerableExtensions.cs` — `OrderByTitle`, `WhereIf`.
+- `Extensions/EnumerableExtensions.cs` — `OrderByIgnoreCase`, `WhereIf`.
 
 > **Cuidado:** projeto "Shared/Common" tende a virar depósito. Regra: se o código cita um conceito
 > do WatchList (título, capa, anime), ele **não** é Shared — vai para Domain ou Application.
@@ -99,9 +99,12 @@ O coração do sistema. Sem I/O, sem framework, 100% testável.
 - `Title` — não vazio, sem espaços nas pontas; comparação ordinal-ignore-case.
 - `CoverImage` — nome de arquivo `.jpg` válido (o slug). Não conhece URL nem pasta.
 - `MediaType` — enum `Anime, Movie, Series, Book, Game, Manga` com `MediaType.Parse("Anime")`
-  tolerante a caixa (hoje é `string` comparada com `ToLower()` nas páginas).
-- `Progress` — valor bruto + `ProgressUnit` (`Episode`, `Chapter`, `Page`, `SeasonEpisode`)
-  derivado do `MediaType`. Guarda o texto original porque há capítulos como `531.1`.
+  tolerante a caixa (hoje é `string` comparada com `ToLower()` nas páginas). `Parse` e
+  `ProgressUnit` são membros de extensão do C# 14 (`MediaTypeExtensions`), já que enum não tem
+  método próprio.
+- `Progress` — valor bruto + `ProgressUnit` (`Episode`, `Chapter`, `Page`, `SeasonEpisode`, e
+  `None` para filme e jogo) derivado do `MediaType`. Guarda o texto original porque há capítulos
+  como `531.1`.
 - `EpisodeMarker` — parse de `S05E16` em `Season`/`Episode`.
 
 **Contratos:**
@@ -315,8 +318,14 @@ watch-list-v3/
 │               └── series/
 │
 ├── tests/
+│   ├── WatchList.Shared.Tests/
+│   │   ├── WatchList.Shared.Tests.csproj
+│   │   ├── Extensions/                        # ToSlug igual ao slugify da skill
+│   │   └── Results/
 │   ├── WatchList.Domain.Tests/
 │   │   ├── WatchList.Domain.Tests.csproj
+│   │   ├── Catalog/
+│   │   ├── Tracking/
 │   │   └── ValueObjects/                      # Title, EpisodeMarker, Progress, MediaType
 │   ├── WatchList.Application.Tests/
 │   │   ├── WatchList.Application.Tests.csproj
@@ -376,9 +385,9 @@ watch-list-v3/
     <PackageVersion Include="Microsoft.Extensions.Options" Version="10.0.*" />
     <PackageVersion Include="Microsoft.Extensions.Caching.Memory" Version="10.0.*" />
     <PackageVersion Include="Microsoft.Extensions.FileProviders.Physical" Version="10.0.*" />
-    <!-- testes -->
-    <PackageVersion Include="xunit.v3" Version="..." />
-    <PackageVersion Include="Shouldly" Version="..." />
+    <!-- testes (xunit.v3 roda no Microsoft.Testing.Platform, ligado no global.json) -->
+    <PackageVersion Include="xunit.v3" Version="4.0.1" />
+    <PackageVersion Include="Shouldly" Version="4.3.0" />
     <PackageVersion Include="NetArchTest.Rules" Version="..." />
   </ItemGroup>
 </Project>
@@ -503,7 +512,7 @@ nome `refactor/fase-<n>` (`refactor/fase-0`, `refactor/fase-1`, …). Sem sufixo
 | Fase | Branch | Status |
 |---|---|---|
 | 0 — Preparação da solution | `refactor/fase-0` | ✅ concluída (24/09/2026) |
-| 1 — Shared e Domain | `refactor/fase-1` | pendente |
+| 1 — Shared e Domain | `refactor/fase-1` | ✅ concluída (29/09/2026) |
 | 2 — Application | `refactor/fase-2` | pendente |
 | 3 — Infrastructure | `refactor/fase-3` | pendente |
 | 4 — Presentation | `refactor/fase-4` | pendente |
@@ -531,14 +540,36 @@ nome `refactor/fase-<n>` (`refactor/fase-0`, `refactor/fase-1`, …). Sem sufixo
 > - Validação: o HTML das 10 páginas, os status HTTP e os arquivos estáticos ficaram iguais aos
 >   de antes da mudança (desconsiderando tokens e IDs aleatórios).
 
-### Fase 1 — Shared e Domain
+### Fase 1 — Shared e Domain ✅ concluída
 1. Criar `WatchList.Shared` (Guard, Result, extensões).
 2. Criar `WatchList.Domain` com value objects e entidades; renomear `Serie` → `Series` e
    `Queue` → `QueueEntry`.
 3. Escrever `WatchList.Domain.Tests` junto (value objects são o melhor retorno de teste aqui).
 
+> **Notas da implementação:**
+> - Os projetos novos ainda não são referenciados pela Presentation: os modelos antigos
+>   (`Models/`, com `Serie` e `Queue`) continuam lá até a fase 4 migrar as páginas. A supressão do
+>   `CA1711` na classe `Queue` foi mantida, com a justificativa apontando para a fase 4.
+> - Entidades são `sealed class` sem setters, com construtor privado e factory
+>   `Create(...)` que recebe o texto cru do arquivo e devolve `Result<T>` — é o que os parsers da
+>   fase 3 vão chamar. Capa vazia vira `null`; capa preenchida fora do padrão `slug.jpg` é erro.
+> - `IReadRepository<T>` ficou para a fase 2, junto com quem o consome.
+> - `OrderByTitle` virou `OrderByIgnoreCase(keySelector)`: com "Title" no nome ele citaria um
+>   conceito do domínio, o que a regra do Shared proíbe.
+> - Entrou um `WatchList.Shared.Tests`, que não estava no plano, para travar o `ToSlug` na mesma
+>   regra do `slugify` da skill `update-covers` (conferido também nos 749 títulos reais).
+> - Todas as linhas reais dos 8 `.txt` passam pelas factories do Domain sem erro.
+> - `CA1716` desligado no `.editorconfig` (só olha palavras reservadas do VB, como `Shared` e
+>   `Error`); `CA1707` desligado só em `tests/` para nomes `Metodo_faz_tal_coisa`.
+> - xunit.v3 4.x só roda no Microsoft.Testing.Platform no SDK 10: o `global.json` ganhou
+>   `"test": { "runner": "Microsoft.Testing.Platform" }` e não há `Microsoft.NET.Test.Sdk` nem
+>   `xunit.runner.visualstudio`.
+> - O `Dockerfile` passou a restaurar só o `.csproj` da Presentation (a `.slnx` agora inclui os
+>   testes) e já copia os `.csproj` de Shared e Domain; `tests/` entrou no `.dockerignore`.
+
 ### Fase 2 — Application
-1. Criar `IReadRepository<T>`, `ICoverUrlResolver`, `PagedResult<T>`, `PageRequest`.
+1. Criar `IReadRepository<T>` (em `WatchList.Domain/Abstractions/`), `ICoverUrlResolver`,
+   `PagedResult<T>`, `PageRequest`.
 2. Implementar os handlers: catálogo, em andamento, fila, dashboard.
 3. Testes com repositório fake em memória.
 
