@@ -17,6 +17,7 @@
 .claude/
 docs/
 tests/
+scripts/
 
 .github
 .gitlab-ci.yml
