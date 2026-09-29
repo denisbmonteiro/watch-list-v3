@@ -1,5 +1,9 @@
 <Solution>
   <Folder Name="/src/">
     <Project Path="src/WatchList.Presentation/WatchList.Presentation.csproj" />
+    <Project Path="src/WatchList.Shared/WatchList.Shared.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/WatchList.Shared.Tests/WatchList.Shared.Tests.csproj" />
   </Folder>
 </Solution>
