@@ -5,4 +5,8 @@
   <ItemGroup>
     <PackageVersion Include="MudBlazor" Version="9.9.0" />
   </ItemGroup>
+  <ItemGroup Label="Testes">
+    <PackageVersion Include="Shouldly" Version="4.3.0" />
+    <PackageVersion Include="xunit.v3" Version="4.0.1" />
+  </ItemGroup>
 </Project>

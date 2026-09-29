@@ -5,10 +5,13 @@ FROM mcr.microsoft.com/dotnet/sdk:10.0 AS build
 WORKDIR /src
 
 # Só o que o restore precisa, para manter a camada em cache enquanto nenhum .csproj mudar.
-COPY global.json Directory.Build.props Directory.Packages.props WatchList.slnx ./
+# Restaura o projeto web (e o que ele referencia), não a solution: os testes ficam fora da imagem.
+COPY global.json Directory.Build.props Directory.Packages.props ./
+COPY src/WatchList.Shared/WatchList.Shared.csproj src/WatchList.Shared/
+COPY src/WatchList.Domain/WatchList.Domain.csproj src/WatchList.Domain/
 COPY src/WatchList.Presentation/WatchList.Presentation.csproj src/WatchList.Presentation/
 
-RUN dotnet restore WatchList.slnx
+RUN dotnet restore src/WatchList.Presentation/WatchList.Presentation.csproj
 
 COPY . .
 

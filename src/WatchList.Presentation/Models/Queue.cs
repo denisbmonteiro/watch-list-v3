@@ -2,7 +2,7 @@
 
 namespace WatchList.Presentation.Models;
 
-[SuppressMessage("Naming", "CA1711", Justification = "Renomeado para QueueEntry na fase 1 (docs/arquitetura-camadas.md).")]
+[SuppressMessage("Naming", "CA1711", Justification = "Substituído por WatchList.Domain.Tracking.QueueEntry; este modelo sai na fase 4 (docs/arquitetura-camadas.md).")]
 public class Queue
 {
     public string Name { get; set; } = string.Empty;
