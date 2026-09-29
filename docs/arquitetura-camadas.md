@@ -1,6 +1,6 @@
 # Plano de separação em camadas — WatchList
 
-> Status: **em andamento** (fases 0 e 1 concluídas) · Data: 23/09/2026 · Alvo: .NET 10 / C# 14
+> Status: **em andamento** (fases 0, 1 e 2 concluídas) · Data: 23/09/2026 · Alvo: .NET 10 / C# 14
 
 Este documento planeja a separação do projeto único `WatchList` em projetos distintos dentro da
 mesma solution, seguindo Clean Architecture, DDD (na medida certa para o tamanho do domínio),
@@ -176,6 +176,8 @@ watch-list-v3/
 │   └── skills/update-covers/                 # caminhos atualizados (ver seção 6)
 ├── docs/
 │   └── arquitetura-camadas.md
+├── scripts/
+│   └── verify-docker.sh                      # verificação de fim de fase (seção 6)
 ├── src/
 │   ├── WatchList.Shared/
 │   │   ├── WatchList.Shared.csproj
@@ -506,6 +508,25 @@ As ~175 linhas de cada página de capa viram ~15; a lógica fica testada na Appl
 
 Cada fase termina com a aplicação **compilando e rodando igual** — dá para parar em qualquer uma.
 
+**Verificação obrigatória no fim de cada fase:** antes do commit/PR, rode
+
+```bash
+scripts/verify-docker.sh        # porta opcional: scripts/verify-docker.sh 8090
+```
+
+O script falha na primeira divergência e faz, tudo em Docker (o que roda em produção):
+
+1. `dotnet test` da solution inteira dentro da imagem `mcr.microsoft.com/dotnet/sdk:10.0` — a
+   mesma do build de produção (SDK, cultura e sistema de arquivos Linux).
+2. `docker build` com o `Dockerfile` real — pega `.csproj` novo que não foi copiado antes do
+   `restore`, arquivo barrado pelo `.dockerignore` etc.
+3. Sobe o container e confere: as 9 páginas respondem 200 com o `<h1>` certo (não a tela de erro),
+   `blazor.web.js`, `app.css`, `favicon.ico` e uma capa real são servidos, e o log não tem
+   `fail:`/`crit:` nem exceção não tratada.
+
+Fase só é marcada como concluída com o script passando. Se a fase mudar rotas, arquivos estáticos
+ou o local dos dados (fases 4 e 5), atualize o script na mesma branch.
+
 **Branches:** cada fase é implementada numa branch local própria, criada a partir da `main`, com o
 nome `refactor/fase-<n>` (`refactor/fase-0`, `refactor/fase-1`, …). Sem sufixo descritivo.
 
@@ -513,7 +534,7 @@ nome `refactor/fase-<n>` (`refactor/fase-0`, `refactor/fase-1`, …). Sem sufixo
 |---|---|---|
 | 0 — Preparação da solution | `refactor/fase-0` | ✅ concluída (24/09/2026) |
 | 1 — Shared e Domain | `refactor/fase-1` | ✅ concluída (29/09/2026) |
-| 2 — Application | `refactor/fase-2` | pendente |
+| 2 — Application | `refactor/fase-2` | ✅ concluída (29/09/2026) |
 | 3 — Infrastructure | `refactor/fase-3` | pendente |
 | 4 — Presentation | `refactor/fase-4` | pendente |
 | 5 — Dados fora do `wwwroot` | `refactor/fase-5` | pendente |
@@ -567,11 +588,37 @@ nome `refactor/fase-<n>` (`refactor/fase-0`, `refactor/fase-1`, …). Sem sufixo
 > - O `Dockerfile` passou a restaurar só o `.csproj` da Presentation (a `.slnx` agora inclui os
 >   testes) e já copia os `.csproj` de Shared e Domain; `tests/` entrou no `.dockerignore`.
 
-### Fase 2 — Application
+### Fase 2 — Application ✅ concluída
 1. Criar `IReadRepository<T>` (em `WatchList.Domain/Abstractions/`), `ICoverUrlResolver`,
    `PagedResult<T>`, `PageRequest`.
 2. Implementar os handlers: catálogo, em andamento, fila, dashboard.
 3. Testes com repositório fake em memória.
+
+> **Notas da implementação:**
+> - A Presentation ainda não referencia a Application; os handlers só entram em uso na fase 4
+>   (os repositórios e o `ICoverUrlResolver` vêm da fase 3). O `Dockerfile` já copia o `.csproj`.
+> - Handlers são `internal sealed` e só são vistos pela interface `IQueryHandler<,>`;
+>   `AddApplication()` os registra como scoped. O projeto de testes enxerga os internos via
+>   `InternalsVisibleTo`.
+> - `PageRequest(PageIndex, PageSize)` é zero-based e valida os limites; `PageSize = int.MaxValue`
+>   (`PageRequest.All`) é o "All" do seletor. Página além do fim é ajustada para a última, como o
+>   `CurrentPage` das páginas faz hoje.
+> - `PagedResult<T>` traz `FilteredCount` (resultado da busca, usado no total de páginas) e
+>   `TotalCount` (lista inteira, usado no "Showing X of Y records"), preservando o comportamento
+>   atual. `TotalPages` nunca é zero.
+> - `CatalogItemDto(Title, CoverUrl, Author, EpisodeMarker)`: um DTO só para os seis tipos; `Author`
+>   só em livro, `EpisodeMarker` só em série, `CoverUrl` nulo quando não há capa (Game e Manga
+>   sempre).
+> - `InProgressItemDto` leva `MediaType` e `ProgressUnit`; o texto ("Episode 12") e a cor ficam
+>   para a Presentation.
+> - `GetQueue` devolve a fila inteira ordenada, sem busca nem paginação: a `TitleTable` continua
+>   filtrando e paginando no cliente e numerando as linhas pela posição na lista completa. Game e
+>   Manga fazem o mesmo usando `GetCatalogPage` com `PageRequest.All`.
+> - A ordenação passou de `OrderBy(Name)` (cultura corrente) para `OrderByIgnoreCase`
+>   (invariante, ignorando caixa) — só muda o desempate entre títulos que diferem na caixa.
+> - A busca não faz `Trim` no termo, igual às páginas de hoje; termo em branco devolve tudo.
+> - Entrou o `scripts/verify-docker.sh` (testes no SDK do Docker + imagem de produção no ar),
+>   agora obrigatório no fim de toda fase.
 
 ### Fase 3 — Infrastructure
 1. `TextFileReader` com `IFileProvider` + `StorageOptions`.
