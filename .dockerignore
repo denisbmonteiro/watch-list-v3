@@ -16,6 +16,7 @@
 *.code-workspace
 .claude/
 docs/
+tests/
 
 .github
 .gitlab-ci.yml

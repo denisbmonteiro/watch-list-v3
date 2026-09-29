@@ -64,3 +64,10 @@ dotnet_naming_style.pascal_case.capitalization = pascal_case
 
 # a regra de "usings desnecessários" só roda no build com GenerateDocumentationFile; deixe como sugestão
 dotnet_diagnostic.IDE0005.severity = suggestion
+
+# CA1716 só olha palavras reservadas do VB (Shared, Error...); a solution é só C#
+dotnet_diagnostic.CA1716.severity = none
+
+[tests/**.cs]
+# nomes de teste no estilo Metodo_faz_tal_coisa
+dotnet_diagnostic.CA1707.severity = none
