@@ -11,6 +11,11 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\WatchList.Application\WatchList.Application.csproj" />
+    <ProjectReference Include="..\WatchList.Infrastructure\WatchList.Infrastructure.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Folder Include="wwwroot\AppData\" />
   </ItemGroup>
 
