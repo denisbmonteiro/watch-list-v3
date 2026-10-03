@@ -10,6 +10,7 @@ COPY global.json Directory.Build.props Directory.Packages.props ./
 COPY src/WatchList.Shared/WatchList.Shared.csproj src/WatchList.Shared/
 COPY src/WatchList.Domain/WatchList.Domain.csproj src/WatchList.Domain/
 COPY src/WatchList.Application/WatchList.Application.csproj src/WatchList.Application/
+COPY src/WatchList.Infrastructure/WatchList.Infrastructure.csproj src/WatchList.Infrastructure/
 COPY src/WatchList.Presentation/WatchList.Presentation.csproj src/WatchList.Presentation/
 
 RUN dotnet restore src/WatchList.Presentation/WatchList.Presentation.csproj
