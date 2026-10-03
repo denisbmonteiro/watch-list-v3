@@ -1,6 +1,6 @@
 # Plano de separação em camadas — WatchList
 
-> Status: **em andamento** (fases 0, 1 e 2 concluídas) · Data: 23/09/2026 · Alvo: .NET 10 / C# 14
+> Status: **em andamento** (fases 0 a 3 concluídas) · Data: 23/09/2026 · Alvo: .NET 10 / C# 14
 
 Este documento planeja a separação do projeto único `WatchList` em projetos distintos dentro da
 mesma solution, seguindo Clean Architecture, DDD (na medida certa para o tamanho do domínio),
@@ -535,7 +535,7 @@ nome `refactor/fase-<n>` (`refactor/fase-0`, `refactor/fase-1`, …). Sem sufixo
 | 0 — Preparação da solution | `refactor/fase-0` | ✅ concluída (24/09/2026) |
 | 1 — Shared e Domain | `refactor/fase-1` | ✅ concluída (29/09/2026) |
 | 2 — Application | `refactor/fase-2` | ✅ concluída (29/09/2026) |
-| 3 — Infrastructure | `refactor/fase-3` | pendente |
+| 3 — Infrastructure | `refactor/fase-3` | ✅ concluída (02/10/2026) |
 | 4 — Presentation | `refactor/fase-4` | pendente |
 | 5 — Dados fora do `wwwroot` | `refactor/fase-5` | pendente |
 | 6 — Guarda-corpos | `refactor/fase-6` | pendente |
@@ -620,12 +620,44 @@ nome `refactor/fase-<n>` (`refactor/fase-0`, `refactor/fase-1`, …). Sem sufixo
 > - Entrou o `scripts/verify-docker.sh` (testes no SDK do Docker + imagem de produção no ar),
 >   agora obrigatório no fim de toda fase.
 
-### Fase 3 — Infrastructure
+### Fase 3 — Infrastructure ✅ concluída
 1. `TextFileReader` com `IFileProvider` + `StorageOptions`.
 2. Um `ILineParser<T>` por arquivo; `TextFileRepository<T>` genérico.
 3. `CoverUrlResolver` e `CachedReadRepository<T>`.
 4. Testes de parser com fixtures reais (BOM, `\r\n`, campo faltando, capítulo `531.1`).
-5. Remover `Services/FileService.cs`, `IFileService.cs` e `Constants/`.
+5. Remover `Services/FileService.cs`, `IFileService.cs` e `Constants/`. → **adiado para a fase 4**
+   (ver notas).
+
+> **Notas da implementação:**
+> - O passo 5 ficou para a fase 4: todas as páginas ainda injetam o `IFileService`, e apagá-lo agora
+>   quebraria a regra de cada fase terminar rodando igual. Sai junto com `Models/`, quando as
+>   páginas passarem para os handlers.
+> - A Presentation já referencia Application e Infrastructure e o `Program.cs` chama
+>   `AddApplication().AddInfrastructure(...)`; nenhuma página consome os handlers ainda. O
+>   `Storage:DataPath` aponta para `wwwroot/AppData` até a fase 5.
+> - `DataPath` relativo é resolvido a partir do `ContentRootPath` do `IHostEnvironment`
+>   (`Microsoft.Extensions.Hosting.Abstractions`, não ASP.NET); a opção é validada no start.
+> - O `IFileProvider` é um `PhysicalFileProvider` registrado como serviço *keyed* (`"Storage"`),
+>   para não virar o `IFileProvider` global do container.
+> - O `TextFileReader` devolve todas as linhas, inclusive as em branco, para o número da linha no
+>   log bater com o arquivo; quem pula as em branco é o `TextFileRepository<T>`. Arquivo ausente
+>   vira lista vazia com *warning* (antes era silencioso).
+> - Linha inválida é descartada com *warning* estruturado (`Skipping line 3 of series.txt: ...`) em
+>   vez de virar objeto vazio. Campos a mais do que o formato prevê são erro
+>   (`TextFile.TooManyFields`); campos faltando ficam a cargo da factory da entidade.
+> - `games.txt` e `manga.txt` continuam usando a linha inteira como título, como o `FileService`.
+> - O repositório não ordena: ordenação é da Application.
+> - Decorator sem Scrutor: `AddTextFile<T, TParser>()` registra parser, repositório e um
+>   `CachedReadRepository<T>` por factory. O cache usa `IMemoryCache` com o change token do
+>   arquivo (`IFileProvider.Watch`), obtido antes da leitura.
+> - Pacotes novos, todos `10.0.12`: `Caching.Memory`, `FileProviders.Physical`,
+>   `Hosting.Abstractions`, `Logging.Abstractions`, `Options.ConfigurationExtensions`; nos testes,
+>   `Configuration` e `DependencyInjection`.
+> - BOM e `\r\n` são testados com bytes gravados num diretório temporário (fixture versionada com
+>   `\r\n` dependeria do `core.autocrlf`). `Fixtures/` tem os 8 `.txt` com linha inválida, linha em
+>   branco, capítulo `531.1` e BOM no `queue.txt`, e alimenta um teste de ponta a ponta
+>   (handlers da Application + DI real da Infrastructure).
+> - Conferido à parte: as 757 linhas reais dos 8 `.txt` passam pelos parsers sem erro.
 
 ### Fase 4 — Presentation
 1. Extrair `CoverGrid`, `CoverPreviewDialog`, `SearchBox`, `ListPager`, `TitleTable`.
