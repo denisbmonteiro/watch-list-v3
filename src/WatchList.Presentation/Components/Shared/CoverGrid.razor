@@ -1,0 +1,155 @@
+@typeparam TItem
+@implements IDisposable
+
+@if (_page is null)
+{
+    <MudProgressLinear Indeterminate="true" Color="Color.Primary" Size="Size.Medium" Striped="true" />
+}
+else
+{
+    <SearchBox Value="@_search" ValueChanged="OnSearchChangedAsync" />
+
+    @if (_page.FilteredCount == 0)
+    {
+        <MudAlert Severity="Severity.Info" Variant="Variant.Outlined">No titles found.</MudAlert>
+    }
+    else
+    {
+        <MudGrid Spacing="4">
+            @foreach (var item in _page.Items)
+            {
+                <MudItem xs="6" sm="4" md="3" lg="2" Class="d-flex">
+                    <MudCard Class="cover-card" Elevation="2">
+                        @if (CoverUrl(item) is { } coverUrl)
+                        {
+                            <div class="cover-card-media" @onclick="() => OpenPreview(item)">
+                                <MudImage Src="@coverUrl" Alt=" " ObjectFit="ObjectFit.Cover" />
+                                @Badge?.Invoke(item)
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="cover-card-placeholder">
+                                <MudIcon Icon="@PlaceholderIcon" />
+                                @Badge?.Invoke(item)
+                            </div>
+                        }
+                        <MudCardContent Class="cover-card-content">
+                            <MudText Typo="Typo.subtitle2" Class="cover-card-title" title="@Title(item)">
+                                @if (TitleIcon is not null)
+                                {
+                                    <MudIcon Icon="@TitleIcon" Size="Size.Small" />
+                                }
+                                @Title(item)
+                            </MudText>
+                            @Details?.Invoke(item)
+                        </MudCardContent>
+                    </MudCard>
+                </MudItem>
+            }
+        </MudGrid>
+    }
+
+    <ListPager PageIndex="_page.PageIndex" PageIndexChanged="OnPageIndexChangedAsync" TotalPages="_page.TotalPages"
+        PageSize="_pageSize" PageSizeChanged="OnPageSizeChangedAsync" ShownCount="_page.Items.Count" TotalCount="_page.TotalCount" />
+
+    <CoverPreviewDialog @bind-Visible="_isPreviewVisible" Title="@(_selected is null ? null : Title(_selected))"
+        ImageUrl="@(_selected is null ? null : CoverUrl(_selected))" />
+}
+
+@code
+{
+    private PagedResult<TItem>? _page;
+    private string? _search;
+    private int _pageIndex;
+    private int _pageSize = ListPager.PageSizeOptions[0];
+    private CancellationTokenSource? _loading;
+    private TItem? _selected;
+    private bool _isPreviewVisible;
+
+    /// <summary>Fetches one page; called again whenever the search, the page or the page size changes.</summary>
+    [Parameter, EditorRequired]
+    public Func<string?, PageRequest, CancellationToken, Task<PagedResult<TItem>>> Load { get; set; } = default!;
+
+    [Parameter, EditorRequired]
+    public Func<TItem, string> Title { get; set; } = default!;
+
+    /// <summary>Null shows the placeholder icon and makes the card not clickable.</summary>
+    [Parameter, EditorRequired]
+    public Func<TItem, string?> CoverUrl { get; set; } = default!;
+
+    [Parameter]
+    public string PlaceholderIcon { get; set; } = Icons.Material.Filled.Tv;
+
+    /// <summary>Shown before the title.</summary>
+    [Parameter]
+    public string? TitleIcon { get; set; }
+
+    /// <summary>Drawn over the cover (or the placeholder).</summary>
+    [Parameter]
+    public RenderFragment<TItem>? Badge { get; set; }
+
+    /// <summary>Extra lines below the title.</summary>
+    [Parameter]
+    public RenderFragment<TItem>? Details { get; set; }
+
+    protected override Task OnInitializedAsync() => LoadAsync();
+
+    private Task OnSearchChangedAsync(string? search)
+    {
+        _search = search;
+        _pageIndex = 0;
+        return LoadAsync();
+    }
+
+    private Task OnPageSizeChangedAsync(int pageSize)
+    {
+        _pageSize = pageSize;
+        _pageIndex = 0;
+        return LoadAsync();
+    }
+
+    private Task OnPageIndexChangedAsync(int pageIndex)
+    {
+        _pageIndex = pageIndex;
+        return LoadAsync();
+    }
+
+    /// <summary>A newer request cancels the one in flight, so a slow answer never overwrites a newer one.</summary>
+    private async Task LoadAsync()
+    {
+        _loading?.Cancel();
+        var loading = _loading = new CancellationTokenSource();
+
+        try
+        {
+            var page = await Load(_search, new PageRequest(_pageIndex, _pageSize), loading.Token);
+
+            if (!loading.IsCancellationRequested)
+            {
+                _page = page;
+                _pageIndex = page.PageIndex;
+            }
+        }
+        catch (OperationCanceledException) when (loading.IsCancellationRequested)
+        {
+        }
+        finally
+        {
+            if (_loading == loading)
+            {
+                _loading = null;
+            }
+
+            loading.Dispose();
+        }
+    }
+
+    private void OpenPreview(TItem item)
+    {
+        _selected = item;
+        _isPreviewVisible = true;
+    }
+
+    public void Dispose() => _loading?.Cancel();
+}
