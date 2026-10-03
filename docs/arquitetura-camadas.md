@@ -1,6 +1,6 @@
 # Plano de separação em camadas — WatchList
 
-> Status: **em andamento** (fases 0 a 3 concluídas) · Data: 23/09/2026 · Alvo: .NET 10 / C# 14
+> Status: **em andamento** (fases 0 a 4 concluídas) · Data: 23/09/2026 · Alvo: .NET 10 / C# 14
 
 Este documento planeja a separação do projeto único `WatchList` em projetos distintos dentro da
 mesma solution, seguindo Clean Architecture, DDD (na medida certa para o tamanho do domínio),
@@ -536,7 +536,7 @@ nome `refactor/fase-<n>` (`refactor/fase-0`, `refactor/fase-1`, …). Sem sufixo
 | 1 — Shared e Domain | `refactor/fase-1` | ✅ concluída (29/09/2026) |
 | 2 — Application | `refactor/fase-2` | ✅ concluída (29/09/2026) |
 | 3 — Infrastructure | `refactor/fase-3` | ✅ concluída (02/10/2026) |
-| 4 — Presentation | `refactor/fase-4` | pendente |
+| 4 — Presentation | `refactor/fase-4` | ✅ concluída (03/10/2026) |
 | 5 — Dados fora do `wwwroot` | `refactor/fase-5` | pendente |
 | 6 — Guarda-corpos | `refactor/fase-6` | pendente |
 
@@ -625,7 +625,7 @@ nome `refactor/fase-<n>` (`refactor/fase-0`, `refactor/fase-1`, …). Sem sufixo
 2. Um `ILineParser<T>` por arquivo; `TextFileRepository<T>` genérico.
 3. `CoverUrlResolver` e `CachedReadRepository<T>`.
 4. Testes de parser com fixtures reais (BOM, `\r\n`, campo faltando, capítulo `531.1`).
-5. Remover `Services/FileService.cs`, `IFileService.cs` e `Constants/`. → **adiado para a fase 4**
+5. Remover `Services/FileService.cs`, `IFileService.cs` e `Constants/`. → **feito na fase 4**
    (ver notas).
 
 > **Notas da implementação:**
@@ -659,11 +659,33 @@ nome `refactor/fase-<n>` (`refactor/fase-0`, `refactor/fase-1`, …). Sem sufixo
 >   (handlers da Application + DI real da Infrastructure).
 > - Conferido à parte: as 757 linhas reais dos 8 `.txt` passam pelos parsers sem erro.
 
-### Fase 4 — Presentation
+### Fase 4 — Presentation ✅ concluída
 1. Extrair `CoverGrid`, `CoverPreviewDialog`, `SearchBox`, `ListPager`, `TitleTable`.
 2. Migrar página por página para os handlers (começar pela `MoviePage`, a mais simples com capa).
 3. Mover `ProgressLabel` e cor por tipo para `Formatting/`.
 4. Dashboard consumindo `DashboardSummaryDto`.
+
+> **Notas da implementação:**
+> - Saíram `Models/`, `Services/` (`FileService`, `IFileService`) e `Constants/` — o passo 5 da
+>   fase 3 — e com eles a supressão do `CA1711` na classe `Queue`. Nenhuma página lê arquivo.
+> - `CoverGrid<TItem>` é genérico porque Home (`InProgressItemDto`) e catálogo (`CatalogItemDto`)
+>   têm DTOs diferentes: recebe `Load(search, page, ct)`, `Title`, `CoverUrl` e, opcionais,
+>   `PlaceholderIcon`, `TitleIcon` (o ícone antes do título dos livros), `Badge` (o chip de tipo da
+>   Home) e `Details` (progresso, episódio, autor). A busca e a paginação chamam o handler de novo;
+>   uma requisição nova cancela a anterior, para uma resposta atrasada não sobrescrever a mais nova.
+> - `TitleTable<TItem>` recebe a lista inteira (Game e Manga via `GetCatalogPage` com
+>   `PageRequest.All`, Queue via `GetQueue`) e mantém busca e paginação do `MudTable` no cliente. O
+>   número da linha é a posição na lista completa, fixado antes do filtro — antes era
+>   `list.IndexOf(item)`, que com DTOs `record` daria o mesmo número para títulos repetidos.
+> - O `GetCatalogPage` passou a buscar também pelo autor (só livros têm): a `BookPage` sempre
+>   permitiu, e a fase 2 tinha deixado isso de fora. Teste novo na Application.
+> - `SeriePage.razor` virou `SeriesPage.razor`; a rota `/serie` e o rótulo "Serie" do gráfico do
+>   Dashboard ficaram iguais, para não mudar nada visível nesta fase.
+> - Validação: o HTML pré-renderizado das 9 páginas tem os mesmos textos, imagens, classes e
+>   atributos que a `main` (a única diferença é o `<h1>` não vir mais repetido no template de
+>   streaming). Busca, paginação, alerta de lista vazia, lightbox, busca por autor, numeração da
+>   fila filtrada e seleção de fatia no Dashboard foram conferidos no Chrome headless contra a
+>   `main`, com o mesmo resultado.
 
 ### Fase 5 — Dados fora do `wwwroot` (recomendado)
 1. Mover `wwwroot/AppData/*.txt` para `App_Data/` com
