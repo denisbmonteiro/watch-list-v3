@@ -1,11 +1,11 @@
 ﻿@page "/dashboard"
 @attribute [StreamRendering]
-@inject IFileService FileService;
+@inject IQueryHandler<GetDashboardSummaryQuery, DashboardSummaryDto> GetDashboardSummary
 
 <h1>Dashboard</h1>
 <br />
 
-@if (data is null)
+@if (_summary is null)
 {
     <MudProgressLinear Indeterminate="true" Color="Color.Primary" Size="Size.Medium" Striped="true" />
 }
@@ -14,71 +14,60 @@ else
     <MudGrid Class="mb-5">
         <MudItem xs="12" sm="6" md="4">
             <MudPaper Elevation="2" Class="pa-4 d-flex align-center justify-center" Style="height: 100px;">
-                <MudText Typo="Typo.h5">In Progress: @data[0]</MudText>
+                <MudText Typo="Typo.h5">In Progress: @_summary.InProgress</MudText>
             </MudPaper>
         </MudItem>
         <MudItem xs="12" sm="6" md="4">
             <MudPaper Elevation="2" Class="pa-4 d-flex align-center justify-center" Style="height: 100px;">
-                <MudText Typo="Typo.h5">Anime: @data[1]</MudText>
+                <MudText Typo="Typo.h5">Anime: @_summary.Anime</MudText>
             </MudPaper>
         </MudItem>
         <MudItem xs="12" sm="12" md="4">
             <MudPaper Elevation="2" Class="pa-4 d-flex align-center justify-center" Style="height: 100px;">
-                <MudText Typo="Typo.h5">Movie: @data[5]</MudText>
+                <MudText Typo="Typo.h5">Movie: @_summary.Movie</MudText>
             </MudPaper>
         </MudItem>
     </MudGrid>
 
     <MudPaper Class="pa-4">
-        @if (indexSelected >= 0)
+        @if (_selectedIndex >= 0)
         {
-            <MudText Typo="Typo.h5" Class="text-center mb-2">@CategorySelected(indexSelected)</MudText>
+            <MudText Typo="Typo.h5" Class="text-center mb-2">@($"{_labels[_selectedIndex]}: {_counts[_selectedIndex]}")</MudText>
         }
 
         <div class="dashboard-chart">
-            <MudChart T="double" ChartType="ChartType.Pie" ChartSeries="@series" @bind-SelectedIndex="indexSelected" ChartLabels="@labels" Width="300px" Height="300px" />
+            <MudChart T="double" ChartType="ChartType.Pie" ChartSeries="@_series" @bind-SelectedIndex="_selectedIndex" ChartLabels="@_labels" Width="300px" Height="300px" />
         </div>
     </MudPaper>
 }
 
 @code
 {
-    private double[]? data = null;
-    private List<ChartSeries<double>> series = new();
-    private int indexSelected = -1;
-    private string[] labels = { "In Progress", "Anime", "Book", "Game", "Manga", "Movie", "Queue", "Serie" };
+    private DashboardSummaryDto? _summary;
+    private string[] _labels = [];
+    private double[] _counts = [];
+    private List<ChartSeries<double>> _series = [];
+    private int _selectedIndex = -1;
 
     protected override async Task OnInitializedAsync()
     {
-        var inProgressList = await FileService.ReadInProgressFileAsync();
-        var animeList = await FileService.ReadAnimeFileAsync();
-        var bookList = await FileService.ReadBookFileAsync();
-        var gameList = await FileService.ReadGameFileAsync();
-        var mangaList = await FileService.ReadMangaFileAsync();
-        var movieList = await FileService.ReadMovieFileAsync();
-        var queueList = await FileService.ReadQueueFileAsync();
-        var serieList = await FileService.ReadSerieFileAsync();
+        var summary = await GetDashboardSummary.HandleAsync(new GetDashboardSummaryQuery(), CancellationToken.None);
 
-        data = new double[]
-        {
-            inProgressList.Count,
-            animeList.Count,
-            bookList.Count,
-            gameList.Count,
-            mangaList.Count,
-            movieList.Count,
-            queueList.Count,
-            serieList.Count
-        };
+        (string Label, int Count)[] slices =
+        [
+            ("In Progress", summary.InProgress),
+            ("Anime", summary.Anime),
+            ("Book", summary.Book),
+            ("Game", summary.Game),
+            ("Manga", summary.Manga),
+            ("Movie", summary.Movie),
+            ("Queue", summary.Queue),
+            ("Serie", summary.Series),
+        ];
 
-        series = new List<ChartSeries<double>>
-        {
-            new ChartSeries<double> { Data = data }
-        };
-    }
-
-    private string CategorySelected(int index)
-    {
-        return $"{labels?[index]}: {data?[index]}";
+        _labels = [.. slices.Select(slice => slice.Label)];
+        _counts = [.. slices.Select(slice => (double)slice.Count)];
+        _series = [new ChartSeries<double> { Data = _counts }];
+        _summary = summary;
     }
 }

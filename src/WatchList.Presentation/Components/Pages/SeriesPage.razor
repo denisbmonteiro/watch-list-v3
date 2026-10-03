@@ -1,0 +1,21 @@
+﻿@page "/serie"
+@attribute [StreamRendering]
+@inject IQueryHandler<GetCatalogPageQuery, PagedResult<CatalogItemDto>> GetCatalogPage
+
+<h1>Series</h1>
+<br />
+
+<CoverGrid TItem="CatalogItemDto" Load="LoadAsync" Title="item => item.Title" CoverUrl="item => item.CoverUrl">
+    <Details>
+        <MudText Typo="Typo.caption" Class="cover-card-progress">
+            <MudIcon Icon="@Icons.Material.Filled.CheckCircle" Size="Size.Small" />
+            @context.EpisodeMarker
+        </MudText>
+    </Details>
+</CoverGrid>
+
+@code
+{
+    private Task<PagedResult<CatalogItemDto>> LoadAsync(string? search, PageRequest page, CancellationToken cancellationToken) =>
+        GetCatalogPage.HandleAsync(new(MediaType.Series, search, page), cancellationToken);
+}

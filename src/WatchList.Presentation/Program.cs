@@ -2,7 +2,6 @@ using MudBlazor.Services;
 using WatchList.Application;
 using WatchList.Infrastructure;
 using WatchList.Presentation.Components;
-using WatchList.Presentation.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -14,7 +13,6 @@ builder.Services
     .AddApplication()
     .AddInfrastructure(builder.Configuration)
     .AddMudServices();
-builder.Services.AddSingleton<IFileService, FileService>();
 
 var app = builder.Build();
 
