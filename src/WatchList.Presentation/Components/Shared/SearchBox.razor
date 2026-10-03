@@ -1,0 +1,13 @@
+<MudStack Row="true" Justify="Justify.FlexEnd" Class="mb-6">
+    <MudTextField T="string" Value="Value" ValueChanged="ValueChanged" Immediate="true" Placeholder="Search" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search"
+        IconSize="Size.Small" Variant="Variant.Outlined" Margin="Margin.Dense" Clearable="true" Class="cover-search" />
+</MudStack>
+
+@code
+{
+    [Parameter]
+    public string? Value { get; set; }
+
+    [Parameter]
+    public EventCallback<string?> ValueChanged { get; set; }
+}

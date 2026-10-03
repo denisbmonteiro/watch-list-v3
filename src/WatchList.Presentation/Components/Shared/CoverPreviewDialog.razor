@@ -1,0 +1,36 @@
+<MudDialog Visible="Visible" VisibleChanged="VisibleChanged" Options="_options" Class="cover-dialog" ContentClass="cover-dialog-content">
+    <TitleContent>
+        <MudText Typo="Typo.subtitle1" Class="cover-preview-title">@Title</MudText>
+    </TitleContent>
+    <DialogContent>
+        @if (ImageUrl is not null)
+        {
+            <div class="cover-preview" @onclick="() => VisibleChanged.InvokeAsync(false)">
+                <MudImage Src="@ImageUrl" Alt=" "></MudImage>
+            </div>
+        }
+    </DialogContent>
+</MudDialog>
+
+@code
+{
+    private readonly DialogOptions _options = new()
+    {
+        MaxWidth = MaxWidth.False,
+        NoHeader = false,
+        CloseButton = true,
+        CloseOnEscapeKey = true,
+    };
+
+    [Parameter]
+    public bool Visible { get; set; }
+
+    [Parameter]
+    public EventCallback<bool> VisibleChanged { get; set; }
+
+    [Parameter]
+    public string? Title { get; set; }
+
+    [Parameter]
+    public string? ImageUrl { get; set; }
+}

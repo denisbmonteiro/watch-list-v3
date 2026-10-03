@@ -25,7 +25,7 @@ internal sealed class GetCatalogPageHandler(
         List<CatalogItemDto> filtered =
         [
             .. items
-                .WhereIf(!string.IsNullOrWhiteSpace(query.Search), item => item.Title.ContainsIgnoreCase(query.Search!))
+                .WhereIf(!string.IsNullOrWhiteSpace(query.Search), item => Matches(item, query.Search!))
                 .OrderByIgnoreCase(item => item.Title),
         ];
 
@@ -49,6 +49,10 @@ internal sealed class GetCatalogPageHandler(
                 manga => new(manga.Title.Value, CoverUrl: null)),
             _ => throw new ArgumentOutOfRangeException(nameof(mediaType), mediaType, null),
         };
+
+    /// <summary>Books are also found by author, as the book list always allowed.</summary>
+    private static bool Matches(CatalogItemDto item, string search) =>
+        item.Title.ContainsIgnoreCase(search) || (item.Author?.ContainsIgnoreCase(search) ?? false);
 
     private string? CoverUrl(MediaType mediaType, CoverImage? coverImage) =>
         coverImage is null ? null : coverUrls.Resolve(mediaType, coverImage);

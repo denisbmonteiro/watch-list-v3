@@ -1,0 +1,62 @@
+@typeparam TItem
+
+@if (Items is null)
+{
+    <MudProgressLinear Indeterminate="true" Color="Color.Primary" Size="Size.Medium" Striped="true" />
+}
+else
+{
+    <MudTable Items="@_rows" Hover="true" Dense="true" Bordered="true" Breakpoint="Breakpoint.None" Filter="new Func<Row, bool>(Matches)">
+        <ToolBarContent>
+            <MudTextField @bind-Value="_search" Placeholder="Search" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
+        </ToolBarContent>
+
+        <HeaderContent>
+            <MudTh Class="text-center w-10">#</MudTh>
+            <MudTh>Name</MudTh>
+            @if (Type is not null)
+            {
+                <MudTh Class="text-center w-15">Type</MudTh>
+            }
+        </HeaderContent>
+
+        <RowTemplate>
+            <MudTd Class="text-center">@context.Number</MudTd>
+            <MudTd>@Title(context.Item)</MudTd>
+            @if (Type is not null)
+            {
+                <MudTd Class="text-center">@Type(context.Item)</MudTd>
+            }
+        </RowTemplate>
+
+        <PagerContent>
+            <MudTablePager PageSizeOptions="new int[] { 20, 50, 100, int.MaxValue }" />
+        </PagerContent>
+    </MudTable>
+}
+
+@code
+{
+    private IReadOnlyList<Row> _rows = [];
+    private string? _search;
+
+    /// <summary>The whole list, already sorted; null while loading. Search and paging happen here.</summary>
+    [Parameter, EditorRequired]
+    public IReadOnlyList<TItem>? Items { get; set; }
+
+    [Parameter, EditorRequired]
+    public Func<TItem, string> Title { get; set; } = default!;
+
+    /// <summary>When set, adds the Type column.</summary>
+    [Parameter]
+    public Func<TItem, string>? Type { get; set; }
+
+    /// <summary>Rows keep their position in the full list, so the number does not change while searching.</summary>
+    protected override void OnParametersSet() =>
+        _rows = Items is null ? [] : [.. Items.Select((item, index) => new Row(index + 1, item))];
+
+    private bool Matches(Row row) =>
+        string.IsNullOrWhiteSpace(_search) || Title(row.Item).Contains(_search, StringComparison.OrdinalIgnoreCase);
+
+    private sealed record Row(int Number, TItem Item);
+}

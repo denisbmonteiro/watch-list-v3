@@ -55,6 +55,14 @@ public sealed class GetCatalogPageHandlerTests
         page.TotalCount.ShouldBe(3);
     }
 
+    [Fact]
+    public async Task Search_also_matches_the_book_author()
+    {
+        var page = await HandleAsync(MediaType.Book, "maruyama");
+
+        page.Items.Select(item => item.Title).ShouldBe(["Overlord 1: The Undead King"]);
+    }
+
     [Theory]
     [InlineData(null)]
     [InlineData("")]
