@@ -336,7 +336,10 @@ e `slugify` ASCII (`c.isalnum() and c.isascii()`) igual à seção SLUG.
 ```
 
 A **escolha da arte continua manual** — o `triage` só monta a contact sheet; quem olha e
-aplica a seção 3 é você. O `install` recusa sobrescrever capa que já existe (`--force`
+aplica a seção 3 é você. Desde 05/10/2026 o `posters` e o `triage` põem a **capa principal**
+do TMDB (o `poster_path`, seção 3.0) sempre como candidato nº 1, marcada
+`<- CAPA PRINCIPAL`, mesmo quando o filtro `en,null` a deixaria de fora; o `info` mostra o
+`poster_path` do título e de cada season. O `install` recusa sobrescrever capa que já existe (`--force`
 só depois de eu confirmar), avisa quando a altura não sai 600, e escreve em
 `images/movie|series|anime` conforme o terceiro argumento. O `posters` repete sozinho sem
 `include_image_language` quando `en,null` não devolve nada, e filtra `aspect_ratio` fora
@@ -531,10 +534,31 @@ exatamente o `S04E13` da linha).
 
 ## 3. Escolher
 
+### 3.0 Primeiro candidato: a capa principal do TMDB
+
+**Comece pela capa que a página do título mostra no TMDB** — o `poster_path` de
+`/3/movie/<id>` ou `/3/tv/<id>` (e de cada season no `/3/tv/<id>`, para cour/temporada).
+Ela sai de graça, na mesma chamada que já confirma identidade, e **não** é necessariamente
+o topo de `/images` por votos. Decisão minha de 05/10/2026: **ela tem preferência.** Só
+troque por outra se ela cair num descarte desta seção — tarja de estreia/formato/edição,
+logo de plataforma, letreiro no idioma errado para a minha linha, caso 2 do romaji (o
+gêmeo limpo ganha), arte de outro cour/temporada — e, quando trocar, me diga por quê.
+
+Origem: em `Just Go with It` (05/10/2026) instalei o one-sheet com elenco e a tagline
+"Sometimes a guy's best wingman… is a wingwoman." escrita **no meio da arte, entre os dois
+protagonistas**, porque li a tagline como sinal de pôster teatral. A capa principal
+(`/5nr4n667HD80Wr7dYmqhIYi6CHN.jpg`, 2000x3000, só o logo) era a mais limpa e estava na
+contact sheet como candidata nº 1. **Frase sobre a arte é texto sobreposto, mesmo sendo a
+tagline do filme** — entre duas versões da mesma arte, fique com a que tem menos texto.
+
+Na contact sheet, marque qual candidato é o `poster_path` (ele costuma estar entre os
+primeiros de `/images`, mas confira pelo `file_path`), para comparar os outros contra ele.
+
 ### 3a. Filmes — o pôster teatral
 
-**REGRA PRINCIPAL: o pôster teatral original, limpo.** A arte que o filme teve no
-cinema, sem nenhuma tarja sobreposta. Nessa ordem de preferência:
+**REGRA PRINCIPAL: a capa principal do TMDB (3.0); fora dela, o pôster teatral original,
+limpo.** A arte que o filme teve no cinema, sem nenhuma tarja sobreposta. Nessa ordem de
+preferência:
 
 1. One-sheet teatral original, sem tarja nenhuma.
 2. O mesmo one-sheet com bloco de créditos no rodapé (aceitável, mas prefira a
@@ -544,7 +568,8 @@ cinema, sem nenhuma tarja sobreposta. Nessa ordem de preferência:
 
 Sinais de que é o teatral: elenco em composição, subtítulo/tagline do filme sob o
 título, formato ~1012x1500 (o TMDB guarda o teatral nessa medida com frequência;
-2000x3000 exato costuma ser arte de streaming). Nenhum é definitivo — olhe a imagem.
+2000x3000 exato costuma ser arte de streaming). Nenhum é definitivo — olhe a imagem, e
+**nenhum deles vence a capa principal limpa** (veja 3.0: a de `Just Go with It` é 2000x3000).
 
 **Arte limpa ganha de proporção exata.** Os dois critérios brigam: o teatral limpo
 costuma estar em 1012x1500 (0.675) enquanto a arte de streaming vem em 2000x3000

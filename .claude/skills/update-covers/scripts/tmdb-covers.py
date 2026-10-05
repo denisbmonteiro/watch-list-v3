@@ -203,10 +203,30 @@ def posters_of(kind, tid, season=None, all_langs=False):
     return ps
 
 
-def show(ps):
+def main_poster(kind, tid, season=None):
+    """A capa que a pagina do titulo mostra no TMDB (poster_path) - preferencia da secao 3.0."""
+    check(kind=kind, tid=tid, season=season)
+    path = f"/{kind}/{tid}" if season is None else f"/{kind}/{tid}/season/{season}"
+    return api(path).get("poster_path")
+
+
+def main_first(ps, main):
+    """Poe a capa principal na frente; se o filtro de idioma/proporcao a deixou de fora, inclui assim mesmo."""
+    if not main:
+        return ps
+    hit = [p for p in ps if p["file_path"] == main]
+    rest = [p for p in ps if p["file_path"] != main]
+    return (hit or [{"file_path": main}]) + rest
+
+
+def show(ps, main=None):
     for i, p in enumerate(ps, 1):
+        tag = "  <- CAPA PRINCIPAL" if p["file_path"] == main else ""
+        if "width" not in p:
+            print(f"   {i:2}. {p['file_path']}  (fora do filtro en,null/proporcao){tag}")
+            continue
         print(f"   {i:2}. {p['file_path']}  {p['width']}x{p['height']}  "
-              f"ar={p['aspect_ratio']:.3f}  votos={p['vote_count']}  lang={p.get('iso_639_1')}")
+              f"ar={p['aspect_ratio']:.3f}  votos={p['vote_count']}  lang={p.get('iso_639_1')}{tag}")
 
 
 # -------------------------------------------------------------------- comandos
@@ -229,19 +249,21 @@ def cmd_info(kind, tid):
     d = api(f"/{kind}/{tid}")
     title = d.get("title") or d.get("name")
     print(f"  [{tid}] {title}  orig={d.get('original_title') or d.get('original_name')}")
+    print(f"  capa principal={d.get('poster_path')}")
     print(f"  pais={d.get('origin_country')}  lang={d.get('original_language')}  "
           f"data={d.get('release_date') or d.get('first_air_date')}")
     if kind == "tv":
         print(f"  temporadas={d.get('number_of_seasons')}  episodios={d.get('number_of_episodes')}")
         for s in d.get("seasons", []):
             print(f"    T{s['season_number']}: {s['name']}  eps={s['episode_count']}  "
-                  f"{(s.get('air_date') or '?')[:4]}")
+                  f"{(s.get('air_date') or '?')[:4]}  capa={s.get('poster_path')}")
 
 
 def cmd_triage(kind, tid, slug, season=None, n=6):
     check(kind=kind, tid=tid, season=season, slug=slug)
-    ps = posters_of(kind, tid, season)[:n]
-    show(ps)
+    main = main_poster(kind, tid, season)
+    ps = main_first(posters_of(kind, tid, season), main)[:n]
+    show(ps, main)
     os.makedirs(WORK, exist_ok=True)
     files = []
     for i, p in enumerate(ps, 1):
@@ -301,7 +323,8 @@ def main(argv):
     elif cmd == "info":
         cmd_info(pos[0], pos[1])
     elif cmd == "posters":
-        show(posters_of(pos[0], pos[1], opt("--season"), "--all-langs" in a))
+        main = main_poster(pos[0], pos[1], opt("--season"))
+        show(main_first(posters_of(pos[0], pos[1], opt("--season"), "--all-langs" in a), main), main)
     elif cmd == "triage":
         cmd_triage(pos[0], pos[1], pos[2], opt("--season"), int(opt("--n", "6")))
     elif cmd == "install":
