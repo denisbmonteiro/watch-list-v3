@@ -1,6 +1,6 @@
 # Plano de separação em camadas — WatchList
 
-> Status: **em andamento** (fases 0 a 4 concluídas) · Data: 23/09/2026 · Alvo: .NET 10 / C# 14
+> Status: **em andamento** (fases 0 a 5 concluídas) · Data: 23/09/2026 · Alvo: .NET 10 / C# 14
 
 Este documento planeja a separação do projeto único `WatchList` em projetos distintos dentro da
 mesma solution, seguindo Clean Architecture, DDD (na medida certa para o tamanho do domínio),
@@ -273,7 +273,7 @@ watch-list-v3/
 │       ├── appsettings.Development.json
 │       ├── Properties/
 │       │   └── launchSettings.json
-│       ├── App_Data/                          # .txt saem do wwwroot (não ficam públicos)
+│       ├── AppData/                           # .txt saem do wwwroot (não ficam públicos)
 │       │   ├── anime.txt
 │       │   ├── books.txt
 │       │   ├── games.txt
@@ -537,7 +537,7 @@ nome `refactor/fase-<n>` (`refactor/fase-0`, `refactor/fase-1`, …). Sem sufixo
 | 2 — Application | `refactor/fase-2` | ✅ concluída (29/09/2026) |
 | 3 — Infrastructure | `refactor/fase-3` | ✅ concluída (02/10/2026) |
 | 4 — Presentation | `refactor/fase-4` | ✅ concluída (03/10/2026) |
-| 5 — Dados fora do `wwwroot` | `refactor/fase-5` | pendente |
+| 5 — Dados fora do `wwwroot` | `refactor/fase-5` | ✅ concluída (07/10/2026) |
 | 6 — Guarda-corpos | `refactor/fase-6` | pendente |
 
 ### Fase 0 — Preparação da solution ✅ concluída
@@ -687,12 +687,28 @@ nome `refactor/fase-<n>` (`refactor/fase-0`, `refactor/fase-1`, …). Sem sufixo
 >   fila filtrada e seleção de fatia no Dashboard foram conferidos no Chrome headless contra a
 >   `main`, com o mesmo resultado.
 
-### Fase 5 — Dados fora do `wwwroot` (recomendado)
-1. Mover `wwwroot/AppData/*.txt` para `App_Data/` com
-   `<Content Include="App_Data\**" CopyToPublishDirectory="PreserveNewest" />`.
-2. `Storage:DataPath` = `App_Data` no `appsettings.json`.
+### Fase 5 — Dados fora do `wwwroot` ✅ concluída
+1. Mover `wwwroot/AppData/*.txt` para `AppData/`, na raiz do projeto, com
+   `<Content Include="AppData\**" CopyToPublishDirectory="PreserveNewest" />`.
+2. `Storage:DataPath` = `AppData` no `appsettings.json`.
 3. Atualizar de novo a skill `update-covers` (ela lê `AppData/*.txt`).
 4. As imagens continuam em `wwwroot/images/` — elas precisam ser públicas.
+
+> **Notas da implementação:**
+> - `git mv wwwroot/AppData AppData` (preserva o histórico dos 8 `.txt`); a pasta manteve o nome
+>   `AppData`, sem o underline do `App_Data` do ASP.NET clássico. O `.csproj` trocou a `<Folder>`
+>   e os 8 `<None>` por um único `<Content Include="AppData\**" ...>`; o publish põe os arquivos
+>   em `/app/AppData/` e nada deles sobra no `wwwroot` nem no manifesto de assets estáticos.
+> - Nenhum código mudou: o `DataPath` relativo já era resolvido pelo `ContentRootPath` (fase 3), que
+>   é a pasta do projeto no `dotnet run` e `/app` no container.
+> - `scripts/verify-docker.sh` ganhou duas checagens: `/AppData/movies.txt` e `/movies.txt`
+>   precisam dar 404, e o log não pode ter `not found; the list is empty` nem `Skipping line` —
+>   arquivo ausente é só *warning* e deixaria a página no ar com a lista vazia.
+>   Conferido o caso negativo: com `Storage__DataPath=wwwroot/AppData` o diretório não existe e a
+>   página dá 500 com `fail:` no log, o que o script já barrava.
+> - Skill `update-covers`: tabela, caminho do `index.txt` e a checagem de órfão passaram para
+>   `AppData/` na raiz do projeto (o `tmdb-covers.py` só mexe em `images/` e não
+>   mudou). Checagem de órfão rodada com os caminhos novos: 0 órfãos.
 
 ### Fase 6 — Guarda-corpos
 1. `WatchList.ArchitectureTests` com NetArchTest validando a tabela da seção 2.
