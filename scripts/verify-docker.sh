@@ -77,11 +77,24 @@ cover="$(curl -fsS "$BASE/movie" | grep -o 'images/movie/[^"]*\.jpg' | head -n1)
 [[ -n "$cover" ]] || fail "nenhuma capa encontrada em /movie"
 check_static "/$cover"
 
-# Nenhuma exceção no log durante as requisições acima.
+# Os .txt de dados ficam fora do wwwroot (fase 5): não podem ser servidos por nenhum caminho.
+check_private() {
+    local path="$1" status
+    status="$(curl -s -o /dev/null -w '%{http_code}' "$BASE$path")"
+    [[ "$status" == 404 ]] || fail "GET $path retornou $status; os dados não podem ser públicos"
+    printf '  ok  %-24s 404\n' "$path"
+}
+
+step "dados privados"
+check_private /AppData/movies.txt
+check_private /movies.txt
+
+# Nenhuma exceção no log durante as requisições acima, nem .txt ausente ou linha descartada
+# (esses dois são só warning e deixariam as páginas no ar com a lista vazia ou incompleta).
 step "logs"
-if docker logs "$CONTAINER" 2>&1 | grep -E '^(fail|crit):|Unhandled exception'; then
+if docker logs "$CONTAINER" 2>&1 | grep -E '^(fail|crit):|Unhandled exception|not found; the list is empty|Skipping line'; then
     fail "o container registrou erros (acima)"
 fi
-echo "  ok  sem fail/crit no log"
+echo "  ok  sem fail/crit, arquivo ausente ou linha descartada no log"
 
 step "tudo certo"

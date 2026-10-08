@@ -16,18 +16,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="wwwroot\AppData\" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <None Include="wwwroot\AppData\anime.txt" />
-    <None Include="wwwroot\AppData\books.txt" />
-    <None Include="wwwroot\AppData\games.txt" />
-    <None Include="wwwroot\AppData\index.txt" />
-    <None Include="wwwroot\AppData\manga.txt" />
-    <None Include="wwwroot\AppData\movies.txt" />
-    <None Include="wwwroot\AppData\queue.txt" />
-    <None Include="wwwroot\AppData\series.txt" />
+    <Content Include="AppData\**" CopyToPublishDirectory="PreserveNewest" />
   </ItemGroup>
 
 </Project>
