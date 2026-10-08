@@ -40,7 +40,9 @@ o `.txt` normalmente não muda (o slug já está lá), só as imagens.
 
 # AS TRÊS LISTAS
 
-Os caminhos abaixo são todos relativos a `src/WatchList.Presentation/wwwroot/`.
+Os `.txt` ficam em `src/WatchList.Presentation/AppData/` (fora do `wwwroot`, para não serem
+públicos) e as imagens em `src/WatchList.Presentation/wwwroot/images/`. Na tabela e no resto do
+documento, `AppData/...` é relativo a `src/WatchList.Presentation/` e `images/...` ao `wwwroot/`.
 
 |                    | Filmes                          | Séries                                  | Animes                                        |
 |--------------------|---------------------------------|-----------------------------------------|-----------------------------------------------|
@@ -81,7 +83,7 @@ se eu pedir.
 
 # A QUARTA LISTA: A HOMEPAGE (`index.txt`)
 
-`src/WatchList.Presentation/wwwroot/AppData/index.txt` **não é uma lista de capas para esta tarefa** — é o
+`src/WatchList.Presentation/AppData/index.txt` **não é uma lista de capas para esta tarefa** — é o
 que aparece na homepage, o que eu estou assistindo/lendo agora. Nunca peça leva dele nem
 edite esse arquivo. Ele importa aqui por um motivo só: **as imagens dele moram nos mesmos
 diretórios das outras listas**, então ele muda a checagem de órfão.
@@ -110,8 +112,8 @@ A checagem de órfão correta une as duas fontes antes de comparar:
 ```bash
 cd src/WatchList.Presentation/wwwroot
 comm -23 <(ls images/anime | sort) \
-  <(cat <(awk -F'___' 'NF==2 {gsub(/\r/,"",$2); print $2}' AppData/anime.txt) \
-        <(awk -F'___' 'NF==4 && $2=="Anime" {gsub(/\r/,"",$4); print $4}' AppData/index.txt) \
+  <(cat <(awk -F'___' 'NF==2 {gsub(/\r/,"",$2); print $2}' ../AppData/anime.txt) \
+        <(awk -F'___' 'NF==4 && $2=="Anime" {gsub(/\r/,"",$4); print $4}' ../AppData/index.txt) \
     | sort)
 ```
 
