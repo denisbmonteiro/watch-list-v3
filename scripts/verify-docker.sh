@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Verificação de fim de fase: roda os testes e sobe a imagem de produção no Docker.
+# Verificação antes de publicar: roda os testes e sobe a imagem de produção no Docker.
 # Uso: scripts/verify-docker.sh [porta]   (padrão 8089)
 set -euo pipefail
 
@@ -77,7 +77,7 @@ cover="$(curl -fsS "$BASE/movie" | grep -o 'images/movie/[^"]*\.jpg' | head -n1)
 [[ -n "$cover" ]] || fail "nenhuma capa encontrada em /movie"
 check_static "/$cover"
 
-# Os .txt de dados ficam fora do wwwroot (fase 5): não podem ser servidos por nenhum caminho.
+# Os .txt de dados ficam fora do wwwroot: não podem ser servidos por nenhum caminho.
 check_private() {
     local path="$1" status
     status="$(curl -s -o /dev/null -w '%{http_code}' "$BASE$path")"
