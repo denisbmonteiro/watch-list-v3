@@ -54,10 +54,10 @@ check_page() {
 step "páginas"
 check_page /           "In Progress"
 check_page /anime      "Anime"
-check_page /movie      "Movies"
-check_page /serie      "Series"
-check_page /book       "Books"
-check_page /game       "Games"
+check_page /movies     "Movies"
+check_page /series     "Series"
+check_page /books      "Books"
+check_page /games      "Games"
 check_page /manga      "Manga"
 check_page /queue      "Queue"
 check_page /dashboard  "Dashboard"
@@ -73,8 +73,8 @@ step "arquivos estáticos"
 check_static /_framework/blazor.web.js
 check_static /app.css
 check_static /favicon.ico
-cover="$(curl -fsS "$BASE/movie" | grep -o 'images/movie/[^"]*\.jpg' | head -n1)"
-[[ -n "$cover" ]] || fail "nenhuma capa encontrada em /movie"
+cover="$(curl -fsS "$BASE/movies" | grep -o 'images/movie/[^"]*\.jpg' | head -n1)"
+[[ -n "$cover" ]] || fail "nenhuma capa encontrada em /movies"
 check_static "/$cover"
 
 # Os .txt de dados ficam fora do wwwroot: não podem ser servidos por nenhum caminho.
