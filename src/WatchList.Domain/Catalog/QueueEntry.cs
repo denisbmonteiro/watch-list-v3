@@ -1,7 +1,7 @@
 using WatchList.Domain.ValueObjects;
 using WatchList.Shared.Results;
 
-namespace WatchList.Domain.Tracking;
+namespace WatchList.Domain.Catalog;
 
 public sealed class QueueEntry
 {

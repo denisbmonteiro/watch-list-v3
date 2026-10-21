@@ -1,9 +1,9 @@
 using WatchList.Application.Abstractions;
 using WatchList.Domain.Abstractions;
-using WatchList.Domain.Tracking;
+using WatchList.Domain.Catalog;
 using WatchList.Shared.Extensions;
 
-namespace WatchList.Application.Tracking.GetQueue;
+namespace WatchList.Application.Catalog.GetQueue;
 
 internal sealed class GetQueueHandler(IReadRepository<QueueEntry> entries)
     : IQueryHandler<GetQueueQuery, IReadOnlyList<QueueItemDto>>

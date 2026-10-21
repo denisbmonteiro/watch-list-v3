@@ -1,7 +1,6 @@
 using WatchList.Application.Abstractions;
 using WatchList.Domain.Abstractions;
 using WatchList.Domain.Catalog;
-using WatchList.Domain.Tracking;
 
 namespace WatchList.Application.Dashboard.GetDashboardSummary;
 

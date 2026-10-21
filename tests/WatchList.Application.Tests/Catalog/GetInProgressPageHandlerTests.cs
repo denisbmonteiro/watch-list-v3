@@ -1,10 +1,10 @@
+using WatchList.Application.Catalog.GetInProgressPage;
 using WatchList.Application.Common;
 using WatchList.Application.Tests.Fakes;
-using WatchList.Application.Tracking.GetInProgressPage;
-using WatchList.Domain.Tracking;
+using WatchList.Domain.Catalog;
 using WatchList.Domain.ValueObjects;
 
-namespace WatchList.Application.Tests.Tracking;
+namespace WatchList.Application.Tests.Catalog;
 
 public sealed class GetInProgressPageHandlerTests
 {
