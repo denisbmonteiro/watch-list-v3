@@ -1,6 +1,6 @@
 using WatchList.Domain.ValueObjects;
 
-namespace WatchList.Application.Tracking.GetInProgressPage;
+namespace WatchList.Application.Catalog.GetInProgressPage;
 
 /// <param name="Progress">The raw value (<c>12</c>, <c>531.1</c>, <c>S05E16</c>); the label is up to the UI.</param>
 public sealed record InProgressItemDto(

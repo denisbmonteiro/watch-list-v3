@@ -1,4 +1,4 @@
-using WatchList.Domain.Tracking;
+using WatchList.Domain.Catalog;
 using WatchList.Shared.Results;
 
 namespace WatchList.Infrastructure.Persistence.TextFiles.Parsers;

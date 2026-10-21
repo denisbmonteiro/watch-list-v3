@@ -6,7 +6,6 @@ using Microsoft.Extensions.Options;
 using WatchList.Application.Abstractions;
 using WatchList.Domain.Abstractions;
 using WatchList.Domain.Catalog;
-using WatchList.Domain.Tracking;
 using WatchList.Infrastructure.Caching;
 using WatchList.Infrastructure.Covers;
 using WatchList.Infrastructure.Options;

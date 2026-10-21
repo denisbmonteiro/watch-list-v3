@@ -1,10 +1,10 @@
 using Microsoft.Extensions.DependencyInjection;
 using WatchList.Application.Abstractions;
 using WatchList.Application.Catalog.GetCatalogPage;
+using WatchList.Application.Catalog.GetInProgressPage;
+using WatchList.Application.Catalog.GetQueue;
 using WatchList.Application.Common;
 using WatchList.Application.Dashboard.GetDashboardSummary;
-using WatchList.Application.Tracking.GetInProgressPage;
-using WatchList.Application.Tracking.GetQueue;
 
 namespace WatchList.Application;
 

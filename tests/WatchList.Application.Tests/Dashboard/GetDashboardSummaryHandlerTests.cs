@@ -1,7 +1,6 @@
 using WatchList.Application.Dashboard.GetDashboardSummary;
 using WatchList.Application.Tests.Fakes;
 using WatchList.Domain.Catalog;
-using WatchList.Domain.Tracking;
 
 namespace WatchList.Application.Tests.Dashboard;
 

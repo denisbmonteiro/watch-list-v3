@@ -6,9 +6,9 @@ using Microsoft.Extensions.Logging.Abstractions;
 using WatchList.Application;
 using WatchList.Application.Abstractions;
 using WatchList.Application.Catalog.GetCatalogPage;
+using WatchList.Application.Catalog.GetQueue;
 using WatchList.Application.Common;
 using WatchList.Application.Dashboard.GetDashboardSummary;
-using WatchList.Application.Tracking.GetQueue;
 using WatchList.Domain.ValueObjects;
 using WatchList.Infrastructure.Tests.Fakes;
 

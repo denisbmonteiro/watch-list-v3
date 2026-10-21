@@ -1,10 +1,10 @@
 using WatchList.Application.Abstractions;
 using WatchList.Application.Common;
 using WatchList.Domain.Abstractions;
-using WatchList.Domain.Tracking;
+using WatchList.Domain.Catalog;
 using WatchList.Shared.Extensions;
 
-namespace WatchList.Application.Tracking.GetInProgressPage;
+namespace WatchList.Application.Catalog.GetInProgressPage;
 
 internal sealed class GetInProgressPageHandler(
     IReadRepository<InProgressEntry> entries,
