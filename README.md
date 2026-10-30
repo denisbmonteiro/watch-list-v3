@@ -6,8 +6,8 @@ A web app to keep track of anime, movies, series, books, games and manga — wha
 
 **Summary**
 - **Description:** A personal title list built with Blazor, with the data stored in plain `.txt` files and no database.
-- **Technologies:** .NET 10, ASP.NET Core Blazor (Interactive Server), MudBlazor, xUnit v3, Shouldly, Docker.
-- **Architecture:** Layered Clean Architecture — Domain, Application, Infrastructure, Presentation and a Shared project.
+- **Technologies:** .NET 10, ASP.NET Core Blazor (Interactive Server), ASP.NET Core Web API, MudBlazor, xUnit v3, Shouldly, Docker.
+- **Architecture:** Layered Clean Architecture — Domain, Application, Infrastructure, Presentation, Api and a Shared project.
 
 **Features**
 - Home page with the titles in progress and how far along each one is (episode, chapter or page).
@@ -16,6 +16,7 @@ A web app to keep track of anime, movies, series, books, games and manga — wha
 - Dashboard with totals per category and a pie chart.
 - Search, pagination and a cover grid with a popup preview.
 - In-memory caching of the data files.
+- REST API (`/api/...`) with the same lists, for development alongside the Blazor app.
 
 **How to run**
 1. Install the [.NET 10 SDK](https://dotnet.microsoft.com/download).
@@ -25,6 +26,12 @@ A web app to keep track of anime, movies, series, books, games and manga — wha
    dotnet run --project src/WatchList.Presentation
    ```
 4. Open `http://localhost:5285` in your browser.
+
+The API runs on its own, reading the same files:
+```bash
+dotnet run --project src/WatchList.Api
+```
+It listens on `http://localhost:5286`, with the OpenAPI document at `/openapi/v1.json` and Swagger UI at `/swagger` in Development. Routes: `/api/anime`, `/api/movies`, `/api/series`, `/api/books`, `/api/games`, `/api/manga` and `/api/in-progress` take `search`, `pageIndex` (zero-based) and `pageSize` (1–100, default 12); `/api/queue` returns the whole queue. The Docker image ships only the Blazor app.
 
 With Docker:
 ```bash
@@ -58,9 +65,10 @@ Covers live in `wwwroot/images/{anime,book,manga,movie,series}/`. Publishing cop
 - [src/WatchList.Application](src/WatchList.Application) — queries (catalog, in progress, queue, dashboard).
 - [src/WatchList.Infrastructure](src/WatchList.Infrastructure) — reading and parsing the `.txt` files, caching and cover resolution.
 - [src/WatchList.Presentation](src/WatchList.Presentation) — Blazor UI with MudBlazor.
+- [src/WatchList.Api](src/WatchList.Api) — REST API with one controller per list.
 - [src/WatchList.Shared](src/WatchList.Shared) — `Result`, guards and extensions.
 - [data](data) — the `.txt` lists.
-- [tests](tests) — unit tests for each layer.
+- [tests](tests) — unit tests for each layer and integration tests for the API.
 
 **Contributing**
 - Suggestions, fixes and improvements are welcome. Open an issue describing the proposal before sending a pull request.

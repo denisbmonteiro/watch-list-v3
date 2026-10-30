@@ -1,5 +1,6 @@
 <Solution>
   <Folder Name="/src/">
+    <Project Path="src/WatchList.Api/WatchList.Api.csproj" />
     <Project Path="src/WatchList.Application/WatchList.Application.csproj" />
     <Project Path="src/WatchList.Domain/WatchList.Domain.csproj" />
     <Project Path="src/WatchList.Infrastructure/WatchList.Infrastructure.csproj" />
@@ -7,6 +8,7 @@
     <Project Path="src/WatchList.Shared/WatchList.Shared.csproj" />
   </Folder>
   <Folder Name="/tests/">
+    <Project Path="tests/WatchList.Api.Tests/WatchList.Api.Tests.csproj" />
     <Project Path="tests/WatchList.Application.Tests/WatchList.Application.Tests.csproj" />
     <Project Path="tests/WatchList.Domain.Tests/WatchList.Domain.Tests.csproj" />
     <Project Path="tests/WatchList.Infrastructure.Tests/WatchList.Infrastructure.Tests.csproj" />
