@@ -16,7 +16,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Content Include="AppData\**" CopyToPublishDirectory="PreserveNewest" />
+    <!-- The lists live in data/ at the repo root (shared with the API); publish puts them in AppData/. -->
+    <Content Include="..\..\data\*.txt" LinkBase="AppData" CopyToPublishDirectory="PreserveNewest" />
   </ItemGroup>
 
 </Project>

@@ -40,13 +40,13 @@ o `.txt` normalmente não muda (o slug já está lá), só as imagens.
 
 # AS TRÊS LISTAS
 
-Os `.txt` ficam em `src/WatchList.Presentation/AppData/` (fora do `wwwroot`, para não serem
-públicos) e as imagens em `src/WatchList.Presentation/wwwroot/images/`. Na tabela e no resto do
-documento, `AppData/...` é relativo a `src/WatchList.Presentation/` e `images/...` ao `wwwroot/`.
+Os `.txt` ficam em `data/`, na raiz do repositório (fora do `wwwroot`, para não serem
+públicos; é a pasta que a Presentation e a API leem) e as imagens em
+`src/WatchList.Presentation/wwwroot/images/`. Na tabela e no resto do documento, `data/...` é relativo à raiz do repositório e `images/...` ao `wwwroot/`.
 
 |                    | Filmes                          | Séries                                  | Animes                                        |
 |--------------------|---------------------------------|-----------------------------------------|-----------------------------------------------|
-| Arquivo            | `AppData/movies.txt`            | `AppData/series.txt`                    | `AppData/anime.txt`                           |
+| Arquivo            | `data/movies.txt`               | `data/series.txt`                       | `data/anime.txt`                              |
 | Linha feita        | `Título___slug.jpg`             | `Título___SxxEyy___slug.jpg`            | `Título___slug.jpg`                           |
 | Linha pendente     | `Título`                        | `Título___SxxEyy`                       | `Título`                                      |
 | Busca              | `/3/search/movie`               | `/3/search/tv`                          | `/3/search/tv` (e `movie` p/ filme, OVA e especial) |
@@ -83,7 +83,7 @@ se eu pedir.
 
 # A QUARTA LISTA: A HOMEPAGE (`index.txt`)
 
-`src/WatchList.Presentation/AppData/index.txt` **não é uma lista de capas para esta tarefa** — é o
+`data/index.txt` **não é uma lista de capas para esta tarefa** — é o
 que aparece na homepage, o que eu estou assistindo/lendo agora. Nunca peça leva dele nem
 edite esse arquivo. Ele importa aqui por um motivo só: **as imagens dele moram nos mesmos
 diretórios das outras listas**, então ele muda a checagem de órfão.
@@ -112,8 +112,8 @@ A checagem de órfão correta une as duas fontes antes de comparar:
 ```bash
 cd src/WatchList.Presentation/wwwroot
 comm -23 <(ls images/anime | sort) \
-  <(cat <(awk -F'___' 'NF==2 {gsub(/\r/,"",$2); print $2}' ../AppData/anime.txt) \
-        <(awk -F'___' 'NF==4 && $2=="Anime" {gsub(/\r/,"",$4); print $4}' ../AppData/index.txt) \
+  <(cat <(awk -F'___' 'NF==2 {gsub(/\r/,"",$2); print $2}' ../../../data/anime.txt) \
+        <(awk -F'___' 'NF==4 && $2=="Anime" {gsub(/\r/,"",$4); print $4}' ../../../data/index.txt) \
     | sort)
 ```
 

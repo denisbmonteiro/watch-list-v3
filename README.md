@@ -41,7 +41,7 @@ The [scripts/verify-docker.sh](scripts/verify-docker.sh) script runs the tests o
 
 **Data format**
 
-The lists live in [src/WatchList.Presentation/AppData](src/WatchList.Presentation/AppData), one title per line, with fields separated by `___`:
+The lists live in [data](data), at the repository root, one title per line, with fields separated by `___`:
 
 ```text
 movies.txt   12 Strong___12-strong.jpg
@@ -51,7 +51,7 @@ queue.txt    Shirobako___Anime
 books.txt    Overlord 1: The Undead King___Kugane Maruyama
 ```
 
-Covers live in `wwwroot/images/{anime,book,manga,movie,series}/`. The data folder can be changed through `Storage:DataPath` in [appsettings.json](src/WatchList.Presentation/appsettings.json).
+Covers live in `wwwroot/images/{anime,book,manga,movie,series}/`. Publishing copies the lists to `AppData/` next to the app, which is what `Storage:DataPath` in [appsettings.json](src/WatchList.Presentation/appsettings.json) points to; in Development, [appsettings.Development.json](src/WatchList.Presentation/appsettings.Development.json) reads `data/` directly, so edits show up without a rebuild.
 
 **Project structure**
 - [src/WatchList.Domain](src/WatchList.Domain) — catalog entities and value objects (title, progress, cover).
@@ -59,6 +59,7 @@ Covers live in `wwwroot/images/{anime,book,manga,movie,series}/`. The data folde
 - [src/WatchList.Infrastructure](src/WatchList.Infrastructure) — reading and parsing the `.txt` files, caching and cover resolution.
 - [src/WatchList.Presentation](src/WatchList.Presentation) — Blazor UI with MudBlazor.
 - [src/WatchList.Shared](src/WatchList.Shared) — `Result`, guards and extensions.
+- [data](data) — the `.txt` lists.
 - [tests](tests) — unit tests for each layer.
 
 **Contributing**
