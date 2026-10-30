@@ -36,7 +36,7 @@ Colocar os arquivos na Infrastructure foi considerado e descartado:
 | Produção (Docker) | `AppData` (em `appsettings.json`, como antes) | O publish gera `AppData/*.txt` ao lado da dll. A imagem fica idêntica à anterior. |
 | Dev (`dotnet run`) | `../../data` em `appsettings.Development.json` | Os dois apps leem o arquivo original. O file watcher do `CachedReadRepository` invalida o cache nos dois quando um `.txt` é editado. |
 
-## 2. Fase 1: mover os dados (PR 1, branch `refactor/shared-data`)
+## 2. Fase 1: mover os dados (PR 1, branch `refactor/shared-data`) — concluída (PR #10)
 
 Esta é a parte que afeta produção, por isso vai sozinha num PR pequeno.
 
@@ -55,7 +55,7 @@ Esta é a parte que afeta produção, por isso vai sozinha num PR pequeno.
    - `bash scripts/verify-docker.sh`. Ele confere se as páginas renderizam, se `/movies` mostra uma
      capa (sinal de que o `movies.txt` foi lido) e se `/AppData/movies.txt` continua inacessível.
 
-## 3. Fase 2: projeto `WatchList.Api` (PR 2, branch `feat/api`)
+## 3. Fase 2: projeto `WatchList.Api` (PR 2, branch `feat/api`) — implementada
 
 **Estrutura:**
 
@@ -67,7 +67,6 @@ src/WatchList.Api/
   appsettings.Development.json    Storage:DataPath = "../../data"
   Properties/launchSettings.json  porta própria (ex.: 5286; a Presentation usa 5285)
   Controllers/
-    CatalogControllerBase.cs      GET compartilhado, parametrizado por MediaType
     AnimeController.cs   MoviesController.cs   SeriesController.cs
     BooksController.cs   GamesController.cs    MangaController.cs
     InProgressController.cs       QueueController.cs
@@ -85,20 +84,22 @@ tests/WatchList.Api.Tests/        WebApplicationFactory apontando DataPath para 
 
 **Decisões de implementação:**
 
-- **Controllers só traduzem.** Cada um recebe HTTP e chama o handler, sem regra de negócio. Os seis
-  de catálogo herdam de `CatalogControllerBase`, então cada um tem duas ou três linhas.
+- **Controllers só traduzem.** Cada um recebe HTTP e chama o handler, sem regra de negócio. Não há
+  controller base: cada controller declara o próprio `GET`, para ficar explícito e independente.
 - **Paginação:**
   - `pageIndex` começa em 0, igual ao `PageRequest`;
-  - o `pageSize` padrão é o primeiro de `ListPager.PageSizeOptions`, com um limite máximo (por
-    exemplo, 100);
+  - o `pageSize` padrão é 12, o primeiro de `ListPager.PageSizeOptions`, com limite de 100;
   - valores inválidos voltam como 400 `ProblemDetails` pela validação automática do
     `[ApiController]`, sem chegar ao `throw` do `PageRequest`.
 - **Enums como texto.** Um `JsonStringEnumConverter` faz `MediaType` e `ProgressUnit` saírem como
   `"Anime"`, e não como `0`.
-- **OpenAPI.** O `Microsoft.AspNetCore.OpenApi` nativo do .NET 10, exposto só em Development. A
-  versão entra em `Directory.Packages.props`.
-- **Testes.** Integração com `Microsoft.AspNetCore.Mvc.Testing`: um teste por rota, mais um de 400
-  para paginação inválida. O projeto entra em `WatchList.slnx`.
+- **OpenAPI.** O `Microsoft.AspNetCore.OpenApi` nativo do .NET 10, com o Swagger UI em
+  `/swagger`, os dois só em Development. As versões entram em `Directory.Packages.props`.
+- **Testes.** Integração com `Microsoft.AspNetCore.Mvc.Testing`: um teste por rota, busca e
+  paginação, enums como texto e 400 para paginação inválida. As Fixtures são as da Infrastructure,
+  incluídas por link, sem cópia. O projeto entra em `WatchList.slnx`.
+- **Erros.** `AddProblemDetails` com `UseExceptionHandler` fora de Development e `UseStatusCodePages`,
+  para que todo erro saia como `application/problem+json`.
 - **Cache.** Cada processo tem o seu `IMemoryCache` e o seu watcher. Não há conflito, porque os dois
   só leem.
 
