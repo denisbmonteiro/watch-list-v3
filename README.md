@@ -31,7 +31,7 @@ The API runs on its own, reading the same files:
 ```bash
 dotnet run --project src/WatchList.Api
 ```
-It listens on `http://localhost:5286`, with the OpenAPI document at `/openapi/v1.json` and Swagger UI at `/swagger` in Development. Routes: `/api/anime`, `/api/movies`, `/api/series`, `/api/books`, `/api/games`, `/api/manga` and `/api/in-progress` take `search`, `pageIndex` (zero-based) and `pageSize` (1–100, default 12); `/api/queue` returns the whole queue. The Docker image ships only the Blazor app.
+It listens on `http://localhost:5286`, with the OpenAPI document at `/openapi/v1.json` and Swagger UI at `/swagger` in Development. Routes: `/api/anime`, `/api/movies`, `/api/series`, `/api/books`, `/api/games`, `/api/manga` and `/api/in-progress` take `search`, `pageIndex` (zero-based) and `pageSize` (1–100, default 12); `/api/queue` returns the whole queue; `/api/dashboard` returns the total per category. The Docker image ships only the Blazor app.
 
 With Docker:
 ```bash

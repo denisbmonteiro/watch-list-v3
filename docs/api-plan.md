@@ -112,6 +112,6 @@ subindo o mesmo de antes. A API roda só localmente até a decisão de publicá-
    da Presentation, que é onde estão as imagens. Na API, esse caminho sozinho não serve para um
    cliente externo. Por agora fica assim, no mesmo padrão da Presentation. Quando um front consumir
    a API, entra uma opção `Covers:BaseUrl`, com padrão vazio para não afetar a Presentation.
-2. **Dashboard.** Fora do escopo, que é só listagens. Se for preciso, `GET /api/dashboard` é mais um
-   controller sobre o handler que já existe.
+2. **Dashboard.** Resolvido: `GET /api/dashboard` é um controller sobre o handler que já existe e
+   devolve o total de cada categoria, como a página `/dashboard`.
 3. **CORS e autenticação.** Ficam para quando a API for exposta.
