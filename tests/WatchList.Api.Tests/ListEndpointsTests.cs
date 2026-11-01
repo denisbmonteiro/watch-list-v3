@@ -7,6 +7,7 @@ using WatchList.Application.Catalog.GetCatalogPage;
 using WatchList.Application.Catalog.GetInProgressPage;
 using WatchList.Application.Catalog.GetQueue;
 using WatchList.Application.Common;
+using WatchList.Application.Dashboard.GetDashboardSummary;
 using WatchList.Domain.ValueObjects;
 
 namespace WatchList.Api.Tests;
@@ -74,6 +75,14 @@ public sealed class ListEndpointsTests(ApiFactory factory) : IClassFixture<ApiFa
         queue.ShouldBe([new QueueItemDto("Kotoha no Niwa", MediaType.Movie), new QueueItemDto("Shirobako", MediaType.Anime)]);
     }
 
+    [Fact]
+    public async Task Dashboard_counts_the_titles_of_every_list()
+    {
+        var summary = await GetAsync<DashboardSummaryDto>("/api/dashboard");
+
+        summary.ShouldBe(new DashboardSummaryDto(InProgress: 3, Anime: 3, Book: 2, Game: 3, Manga: 2, Movie: 2, Queue: 2, Series: 2));
+    }
+
     [Theory]
     [InlineData("/api/anime?pageIndex=-1")]
     [InlineData("/api/movies?pageSize=0")]
@@ -100,7 +109,7 @@ public sealed class ListEndpointsTests(ApiFactory factory) : IClassFixture<ApiFa
     [Fact]
     public async Task Unknown_route_returns_not_found()
     {
-        using var response = await _client.GetAsync(new Uri("/api/dashboard", UriKind.Relative), TestContext.Current.CancellationToken);
+        using var response = await _client.GetAsync(new Uri("/api/unknown", UriKind.Relative), TestContext.Current.CancellationToken);
 
         response.StatusCode.ShouldBe(HttpStatusCode.NotFound);
     }
