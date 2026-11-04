@@ -27,17 +27,48 @@ A web app to keep track of anime, movies, series, books, games and manga — wha
    ```
 4. Open `http://localhost:5285` in your browser.
 
-The API runs on its own, reading the same files:
-```bash
-dotnet run --project src/WatchList.Api
-```
-It listens on `http://localhost:5286`, with the OpenAPI document at `/openapi/v1.json` and Swagger UI at `/swagger` in Development. Routes: `/api/anime`, `/api/movies`, `/api/series`, `/api/books`, `/api/games`, `/api/manga` and `/api/in-progress` take `search`, `pageIndex` (zero-based) and `pageSize` (1–100, default 12); `/api/queue` returns the whole queue; `/api/dashboard` returns the total per category. The Docker image ships only the Blazor app.
+To run the API instead, see the **API** section below.
 
 With Docker:
 ```bash
 docker build -t watchlist .
 docker run -p 8080:8080 watchlist
 ```
+
+**API**
+
+`WatchList.Api` is a second host on top of the same Application and Infrastructure layers. It reads the same files in `data/` as the Blazor app, so both can run side by side:
+
+```bash
+dotnet run --project src/WatchList.Api
+```
+
+It listens on `http://localhost:5286`. In Development, the OpenAPI document is at `/openapi/v1.json` and Swagger UI at `/swagger`. The API is read-only: every route is a `GET`.
+
+| Route | Returns |
+|---|---|
+| `/api/anime`, `/api/movies`, `/api/series`, `/api/books`, `/api/games`, `/api/manga` | One page of that list |
+| `/api/in-progress` | One page of the titles in progress, as on the home page |
+| `/api/queue` | The whole queue, sorted by title and not paged |
+| `/api/dashboard` | How many titles each list holds |
+
+Paged routes take three query parameters:
+- `search`: matches the title (and the author, for books), ignoring case.
+- `pageIndex`: zero-based, default `0`. A page past the end returns the last page.
+- `pageSize`: `1`–`100`, default `12`.
+
+They return `items`, `pageIndex`, `pageSize`, `filteredCount`, `totalCount`, `totalPages`, `hasPreviousPage` and `hasNextPage`. A `pageIndex` or `pageSize` out of range returns `400` with a Problem Details body.
+
+```bash
+curl "http://localhost:5286/api/movies?search=strong&pageSize=5"
+```
+
+Some fields to know:
+- Enums (`mediaType`, `progressUnit`) are serialized as strings, such as `"Anime"` or `"SeasonEpisode"`.
+- `coverUrl` is a path relative to the Blazor app, such as `images/movie/12-strong.jpg`, because the covers are served by the Blazor app. It is `null` while a title has no cover.
+- `author` is filled only for books, and `episodeMarker` only for series.
+
+The Docker image ships only the Blazor app; the API is not deployed.
 
 **Tests**
 ```bash
