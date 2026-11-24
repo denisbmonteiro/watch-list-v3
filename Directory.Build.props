@@ -8,4 +8,8 @@
     <AnalysisLevel>latest-recommended</AnalysisLevel>
     <EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
   </PropertyGroup>
+
+  <PropertyGroup Condition="$(MSBuildProjectName.EndsWith('.Tests'))">
+    <TestingPlatformCommandLineArguments>$(TestingPlatformCommandLineArguments) --results-directory $(MSBuildProjectDirectory)/bin/TestResults</TestingPlatformCommandLineArguments>
+  </PropertyGroup>
 </Project>
